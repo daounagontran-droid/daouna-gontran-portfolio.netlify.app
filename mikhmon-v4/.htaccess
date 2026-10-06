@@ -1,0 +1,7 @@
+# Mikhmon V4 - Apache
+Options -Indexes
+DirectoryIndex index.php
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule ^(data|inc|pages)(/|$) - [F,L]
+</IfModule>
