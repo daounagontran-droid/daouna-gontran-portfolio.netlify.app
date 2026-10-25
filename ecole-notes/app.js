@@ -11,6 +11,25 @@ const TRIMESTRES = [1, 2, 3];
 const app = document.getElementById('app');
 const printArea = document.getElementById('print-area');
 
+// Photos d'illustration (Unsplash). Sans connexion, un fond dégradé les remplace.
+const unsplash = (id, w = 1200) => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=75`;
+const PHOTOS = {
+    accueil: unsplash('1503676260728-1c00da094a0b', 1600),
+    classes: unsplash('1427504494785-3a9ca7044f45', 600),
+    saisie: unsplash('1434030216411-0b793f4b4173', 600),
+    bulletins: unsplash('1450101499163-c8848c66ca85', 600),
+    resultats: unsplash('1551288049-bebda4e38f71', 600),
+    vide: unsplash('1509062522246-3755977927d7', 800)
+};
+
+function photo(src, alt = '') {
+    return `<img src="${src}" alt="${esc(alt)}" loading="lazy" onerror="this.remove()">`;
+}
+
+function icon(name) {
+    return `<svg class="icon"><use href="#i-${name}"/></svg>`;
+}
+
 // ---------------------------------------------------------------------
 // Données
 // ---------------------------------------------------------------------
@@ -337,11 +356,16 @@ function selectTrim(key = 'trim', avecAnnuel = false) {
 }
 
 function aucuneClasse() {
-    return `<div class="card empty">
-        <p>Aucune classe pour le moment.</p>
-        <p class="hint">Commencez par créer une classe, ses matières et ses élèves.</p>
-        <p style="margin-top:1rem"><button class="btn" data-action="goto" data-view="classes">Créer une classe</button>
-        <button class="btn secondary" data-action="demo">Charger des données de démonstration</button></p>
+    return `<div class="card empty-state">
+        <div class="media">${photo(PHOTOS.vide, 'Salle de classe')}</div>
+        <div class="content">
+            <h2>Aucune classe pour le moment</h2>
+            <p>Commencez par créer une classe, ses matières et ses élèves. Vous pourrez ensuite saisir les notes et imprimer les bulletins.</p>
+            <div class="toolbar">
+                <button class="btn" data-action="goto" data-view="classes">${icon('users')} Créer une classe</button>
+                <button class="btn secondary" data-action="demo">Essayer avec des données de démonstration</button>
+            </div>
+        </div>
     </div>`;
 }
 
@@ -360,36 +384,53 @@ views.accueil = () => {
                     nbNotes += (r.d || []).filter(isNum).length + (isNum(r.c) ? 1 : 0);
                 }
 
+    const etapes = [
+        ['classes', 'Classes & élèves', 'Créez les classes, les matières avec leurs coefficients et la liste des élèves (copier-coller depuis Excel possible).'],
+        ['saisie', 'Saisie des notes', 'Choisissez la classe, le trimestre et la matière, puis tapez les notes. Moyennes et rangs se calculent seuls.'],
+        ['bulletins', 'Bulletins', 'Vérifiez les bulletins puis imprimez-les ou enregistrez-les en PDF, pour un élève ou toute la classe.'],
+        ['resultats', 'Résultats', 'Consultez le classement, les statistiques de la classe et exportez-les vers Excel.']
+    ];
+
     return `
-    <h1>Bienvenue 👋</h1>
-    <p class="subtitle">Saisissez les notes de vos élèves et imprimez les bulletins en quelques clics. Tout fonctionne sans connexion internet.</p>
-    <div class="stats">
-        <div class="stat"><div class="value">${state.classes.length}</div><div class="label">Classes</div></div>
-        <div class="stat"><div class="value">${nbEleves}</div><div class="label">Élèves</div></div>
-        <div class="stat"><div class="value">${nbMatieres}</div><div class="label">Matières (toutes classes)</div></div>
-        <div class="stat"><div class="value">${nbNotes}</div><div class="label">Notes saisies</div></div>
-    </div>
-    <div class="grid-2">
-        <div class="card">
-            <h2>Comment ça marche ?</h2>
-            <ol class="steps">
-                <li><strong>Paramètres</strong> : renseignez le nom de l'école, l'année scolaire, le logo et le mode de calcul.</li>
-                <li><strong>Classes &amp; élèves</strong> : créez vos classes, leurs matières (avec coefficients) et la liste des élèves. Vous pouvez coller une liste depuis Excel.</li>
-                <li><strong>Saisie des notes</strong> : choisissez la classe, le trimestre et la matière, puis tapez les notes. Touche <kbd>Entrée</kbd> pour passer à l'élève suivant.</li>
-                <li><strong>Bulletins</strong> : vérifiez puis imprimez les bulletins (ou enregistrez-les en PDF).</li>
-                <li><strong>Résultats</strong> : consultez le classement, les statistiques et exportez vers Excel.</li>
-            </ol>
-        </div>
-        <div class="card">
-            <h2>Sauvegarde des données</h2>
-            <p>Les données sont enregistrées automatiquement <strong>dans ce navigateur, sur cet ordinateur</strong>.
-            Pensez à exporter régulièrement une sauvegarde sur une clé USB ou par e-mail.</p>
-            <div class="toolbar" style="margin-top:1rem">
-                <button class="btn" data-action="export-json">💾 Exporter une sauvegarde</button>
-                <button class="btn secondary" data-action="import-json">📂 Restaurer une sauvegarde</button>
+    <section class="hero">
+        ${photo(PHOTOS.accueil, 'Élèves en classe')}
+        <div class="hero-content">
+            <span class="eyebrow">Année scolaire ${esc(state.ecole.annee)}</span>
+            <h1>${esc(state.ecole.nom)}</h1>
+            <p>Saisissez les notes, calculez les moyennes et imprimez les bulletins en quelques clics, même sans connexion internet.</p>
+            <div class="toolbar">
+                ${state.classes.length
+                    ? `<button class="btn accent" data-action="goto" data-view="saisie">${icon('edit')} Saisir des notes</button>
+                       <button class="btn ghost" data-action="goto" data-view="bulletins">${icon('file')} Voir les bulletins</button>`
+                    : `<button class="btn accent" data-action="goto" data-view="classes">${icon('users')} Créer ma première classe</button>
+                       <button class="btn ghost" data-action="demo">Essayer avec des données de démonstration</button>`}
             </div>
-            ${state.classes.length ? '' : `<p class="hint">Pour découvrir l'application :</p>
-            <button class="btn secondary" data-action="demo">Charger des données de démonstration</button>`}
+        </div>
+    </section>
+
+    <div class="stats">
+        <div class="stat"><div class="stat-icon">${icon('school')}</div><div><div class="value">${state.classes.length}</div><div class="label">Classes</div></div></div>
+        <div class="stat"><div class="stat-icon">${icon('users')}</div><div><div class="value">${nbEleves}</div><div class="label">Élèves</div></div></div>
+        <div class="stat"><div class="stat-icon">${icon('book')}</div><div><div class="value">${nbMatieres}</div><div class="label">Matières</div></div></div>
+        <div class="stat"><div class="stat-icon">${icon('edit')}</div><div><div class="value">${nbNotes}</div><div class="label">Notes saisies</div></div></div>
+    </div>
+
+    <h2>Comment ça marche ?</h2>
+    <div class="steps-grid">
+        ${etapes.map(([view, titre, texte], i) => `
+        <div class="step" data-action="goto" data-view="${view}">
+            <div class="step-img">${photo(PHOTOS[view], titre)}<span class="step-num">${i + 1}</span></div>
+            <div class="step-body"><h3>${esc(titre)}</h3><p>${esc(texte)}</p></div>
+        </div>`).join('')}
+    </div>
+
+    <div class="card">
+        <h2>Sauvegarde des données</h2>
+        <p>Les données sont enregistrées automatiquement <strong>dans ce navigateur, sur cet ordinateur</strong>.
+        Exportez régulièrement une sauvegarde (clé USB, e-mail) pour ne rien perdre et pour transférer les données sur un autre poste.</p>
+        <div class="toolbar" style="margin-top:1rem; margin-bottom:0">
+            <button class="btn" data-action="export-json">${icon('save')} Exporter une sauvegarde</button>
+            <button class="btn secondary" data-action="import-json">${icon('upload')} Restaurer une sauvegarde</button>
         </div>
     </div>`;
 };
@@ -514,7 +555,7 @@ views.saisie = () => {
                     <option value="vie" ${ui.matiereId === 'vie' ? 'selected' : ''}>— Absences &amp; appréciations du conseil —</option>
                 </select></label>
             <div class="spacer"></div>
-            <span class="hint">Enregistrement automatique ✔</span>
+            <span class="badge">${icon('check').replace('class="icon"', 'class="icon" style="width:13px;height:13px;vertical-align:-2px"')} Enregistrement automatique</span>
         </div>
         ${!c.eleves.length ? '<p class="empty">Cette classe n\'a pas encore d\'élèves.</p>'
             : ui.matiereId === 'vie' ? grilleVie(c) : grilleNotes(c)}
@@ -624,7 +665,7 @@ views.bulletins = () => {
                     ${c.eleves.map(e => `<option value="${e.id}" ${e.id === ui.eleveId ? 'selected' : ''}>${esc(nomComplet(e))}</option>`).join('')}
                 </select></label>
             <div class="spacer"></div>
-            <button class="btn" data-action="print-bulletins" ${c.eleves.length ? '' : 'disabled'}>🖨️ Imprimer</button>
+            <button class="btn" data-action="print-bulletins" ${c.eleves.length ? '' : 'disabled'}>${icon('print')} Imprimer</button>
         </div>
     </div>
     <div class="bulletin-preview" id="bulletins">${c.eleves.length ? genererBulletins(c, ui.trim, ui.eleveId) : '<div class="card empty">Aucun élève dans cette classe.</div>'}</div>`;
@@ -754,8 +795,8 @@ views.resultats = () => {
             ${selectClasse()}
             ${selectTrim('resTrim', true)}
             <div class="spacer"></div>
-            <button class="btn secondary" data-action="export-csv">📊 Exporter (Excel / CSV)</button>
-            <button class="btn" data-action="print-resultats">🖨️ Imprimer</button>
+            <button class="btn secondary" data-action="export-csv">${icon('download')} Exporter (Excel / CSV)</button>
+            <button class="btn" data-action="print-resultats">${icon('print')} Imprimer</button>
         </div>
     </div>
     <div id="resultats">${annuel ? tableAnnuel(c) : tableTrimestre(c, Number(ui.resTrim))}</div>`;
@@ -764,11 +805,11 @@ views.resultats = () => {
 function statsCartes(st, total) {
     const taux = st.nb ? (st.admis / st.nb) * 100 : null;
     return `<div class="stats">
-        <div class="stat"><div class="value">${fmt(st.moy)}</div><div class="label">Moyenne de la classe</div></div>
-        <div class="stat"><div class="value">${fmt(st.max)}</div><div class="label">Plus forte moyenne</div></div>
-        <div class="stat"><div class="value">${fmt(st.min)}</div><div class="label">Plus faible moyenne</div></div>
-        <div class="stat"><div class="value">${st.admis} / ${st.nb}</div><div class="label">Moyenne ≥ ${state.config.seuil} (${taux === null ? '—' : fmt(taux, 1) + ' %'})</div></div>
-        <div class="stat"><div class="value">${total - st.nb}</div><div class="label">Élèves sans moyenne</div></div>
+        <div class="stat"><div><div class="value">${fmt(st.moy)}</div><div class="label">Moyenne de la classe</div></div></div>
+        <div class="stat"><div><div class="value">${fmt(st.max)}</div><div class="label">Plus forte moyenne</div></div></div>
+        <div class="stat"><div><div class="value">${fmt(st.min)}</div><div class="label">Plus faible moyenne</div></div></div>
+        <div class="stat"><div><div class="value">${st.admis} / ${st.nb}</div><div class="label">Moyenne ≥ ${state.config.seuil} (${taux === null ? '—' : fmt(taux, 1) + ' %'})</div></div></div>
+        <div class="stat"><div><div class="value">${total - st.nb}</div><div class="label">Élèves sans moyenne</div></div></div>
     </div>`;
 }
 
@@ -849,7 +890,7 @@ function exporterCsv() {
             ...r.lignes.map(l => num(l.moy)), num(r.moyG), distinction(r.moyG)
         ]));
     }
-    const csv = '﻿' + rows.map(r => r.map(cell).join(sep)).join('\r\n');
+    const csv = '\uFEFF' + rows.map(r => r.map(cell).join(sep)).join('\r\n');
     telecharger(`resultats-${c.nom.replace(/\s+/g, '_')}-${suffixe}.csv`, csv, 'text/csv;charset=utf-8');
 }
 
@@ -893,8 +934,8 @@ views.parametres = () => {
     <div class="card">
         <h2>Sauvegarde</h2>
         <div class="toolbar">
-            <button class="btn" data-action="export-json">💾 Exporter une sauvegarde</button>
-            <button class="btn secondary" data-action="import-json">📂 Restaurer une sauvegarde</button>
+            <button class="btn" data-action="export-json">${icon('save')} Exporter une sauvegarde</button>
+            <button class="btn secondary" data-action="import-json">${icon('upload')} Restaurer une sauvegarde</button>
             <div class="spacer"></div>
             <button class="btn danger" data-action="reset">Effacer toutes les données</button>
         </div>
@@ -907,6 +948,9 @@ function render() {
     document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('active', b.dataset.view === ui.view));
     document.getElementById('brand-ecole').textContent = state.ecole.nom || 'Mon école';
     document.getElementById('brand-annee').textContent = `Année scolaire ${state.ecole.annee || ''}`;
+    document.getElementById('brand-logo').innerHTML = state.ecole.logo
+        ? `<img src="${state.ecole.logo}" alt="Logo">`
+        : icon('school');
     app.innerHTML = views[ui.view]();
 }
 
