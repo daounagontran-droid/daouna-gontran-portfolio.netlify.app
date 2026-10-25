@@ -648,6 +648,14 @@ h1, h2, h3 { font-family: var(--font-title); line-height: 1.2; letter-spacing: -
 
 .social-links a:hover { background: var(--gold); color: var(--navy); }
 
+/* Bloc Wi-Fi Zone */
+.featured-wifi .featured-media { padding: 2.5rem; align-items: center; }
+.featured-wifi .featured-media a { display: block; width: 100%; }
+.featured-wifi .featured-media img { border-radius: 12px; aspect-ratio: 16 / 9; height: auto; }
+.skill-link { color: var(--blue); font-weight: 600; text-decoration: none; white-space: nowrap; }
+.skill-link:hover { text-decoration: underline; }
+@media (max-width: 560px) { .featured-wifi .featured-media { padding: 1.5rem; } }
+
 /* Apparition au défilement */
 .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
 .reveal.visible { opacity: 1; transform: none; }
