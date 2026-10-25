@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des notes et bulletins</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="app-header no-print">
+        <div class="brand">
+            <span class="brand-icon">📘</span>
+            <div>
+                <strong id="brand-ecole">Mon école</strong>
+                <small id="brand-annee">Année scolaire</small>
+            </div>
+        </div>
+        <nav id="tabs">
+            <button data-view="accueil" class="active">Accueil</button>
+            <button data-view="classes">Classes &amp; élèves</button>
+            <button data-view="saisie">Saisie des notes</button>
+            <button data-view="bulletins">Bulletins</button>
+            <button data-view="resultats">Résultats</button>
+            <button data-view="parametres">Paramètres</button>
+        </nav>
+    </header>
+
+    <main id="app" class="no-print"></main>
+
+    <!-- Zone utilisée uniquement pour l'impression des bulletins -->
+    <div id="print-area"></div>
+
+    <div id="toast" class="toast no-print"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
