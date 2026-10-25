@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wi-Fi Zone : comment ça marche ? — DAOUNA Gontran</title>
+    <meta name="description" content="Des vidéos courtes pour comprendre une Wi-Fi zone : le principe, la connexion avec un ticket, l'installation et la gestion au quotidien. Installation à N'Djamena par DAOUNA Gontran.">
+    <meta property="og:title" content="Wi-Fi Zone : comment ça marche ? Expliqué en vidéo">
+    <meta property="og:description" content="Principe, connexion avec un ticket, installation et gestion d'une Wi-Fi zone, en 4 vidéos courtes.">
+    <meta property="og:image" content="videos/principe.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Icônes -->
+    <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+        <symbol id="i-wifi" viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><path d="M12 20h.01"/></symbol>
+        <symbol id="i-play" viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></symbol>
+        <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></symbol>
+        <symbol id="i-share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.59 13.51 6.83 3.98"/><path d="m15.41 6.51-6.82 3.98"/></symbol>
+        <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></symbol>
+        <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
+        <symbol id="i-mail" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></symbol>
+        <symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></symbol>
+        <symbol id="i-linkedin" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></symbol>
+        <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+        <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+        <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></symbol>
+        <symbol id="i-coins" viewBox="0 0 24 24"><circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18"/><path d="M7 6h1v4"/><path d="m16.71 13.88.7.71-2.82 2.82"/></symbol>
+        <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+        <symbol id="i-ticket" viewBox="0 0 24 24"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></symbol>
+        <symbol id="i-wrench" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></symbol>
+        <symbol id="i-mute" viewBox="0 0 24 24"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="m23 9-6 6"/><path d="m17 9 6 6"/></symbol>
+    </svg>
+
+    <header class="site-header" id="header">
+        <nav class="container nav">
+            <a href="../" class="logo"><span class="logo-mark">DG</span><span>DAOUNA Gontran</span></a>
+            <button class="nav-toggle" id="nav-toggle" aria-label="Ouvrir le menu" aria-expanded="false"><span></span><span></span><span></span></button>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="#videos">Les vidéos</a></li>
+                <li><a href="#avantages">Pourquoi ?</a></li>
+                <li><a href="#offre">Mon offre</a></li>
+                <li><a href="#faq">Questions</a></li>
+                <li><a href="#contact" class="btn btn-small">Demander un devis</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero wz-hero">
+        <div class="container hero-grid">
+            <div class="hero-text">
+                <span class="eyebrow"><svg class="icon"><use href="#i-wifi"/></svg> Wi-Fi Zone · N'Djamena</span>
+                <h1>Une Wi-Fi zone, comment ça marche ? Je vous l'explique en vidéo.</h1>
+                <p class="lead">Quatre vidéos courtes pour tout comprendre : le principe, la connexion d'un client avec un ticket, l'installation sur le terrain et la gestion au quotidien.</p>
+                <div class="hero-actions">
+                    <a href="#videos" class="btn">Regarder les vidéos <svg class="icon"><use href="#i-play"/></svg></a>
+                    <a href="#contact" class="btn btn-outline">Installer ma Wi-Fi zone</a>
+                </div>
+                <ul class="hero-roles">
+                    <li><svg class="icon"><use href="#i-play"/></svg> 4 vidéos de 30 secondes</li>
+                    <li><svg class="icon"><use href="#i-mute"/></svg> Sous-titrées, sans son</li>
+                    <li><svg class="icon"><use href="#i-download"/></svg> Légères : 0,5 Mo chacune</li>
+                </ul>
+            </div>
+            <a href="#videos" class="wz-hero-media" data-play="principe" aria-label="Lire la vidéo : Comment fonctionne une Wi-Fi zone ?">
+                <img src="videos/principe.jpg" alt="Aperçu de la vidéo : Internet, routeur hotspot, antennes et clients" width="1280" height="720">
+                <span class="wz-play-big"><svg class="icon"><use href="#i-play"/></svg></span>
+            </a>
+        </div>
+    </section>
+
+    <section id="videos" class="section">
+        <div class="container">
+            <div class="section-head">
+                <span class="section-kicker">Les vidéos</span>
+                <h2 class="section-title">Comprendre une Wi-Fi zone en 2 minutes</h2>
+                <p>Regardez-les dans l'ordre ou choisissez celle qui vous intéresse. Vous pouvez aussi les télécharger ou les partager sur WhatsApp.</p>
+            </div>
+
+            <div class="wz-player">
+                <div class="wz-main">
+                    <div class="wz-screen">
+                        <video id="player" controls playsinline preload="none" poster="videos/principe.jpg">
+                            <source src="videos/principe.mp4" type="video/mp4">
+                            Votre navigateur ne peut pas lire cette vidéo. <a href="videos/principe.mp4">Télécharger la vidéo</a>.
+                        </video>
+                    </div>
+                    <div class="wz-info">
+                        <span class="wz-count" id="v-count">Vidéo 1 sur 4</span>
+                        <h3 id="v-title">Comment fonctionne une Wi-Fi zone ?</h3>
+                        <p id="v-desc"></p>
+                        <ol class="wz-steps" id="v-steps"></ol>
+                        <div class="wz-actions">
+                            <a id="v-download" href="videos/principe.mp4" download class="btn btn-light"><svg class="icon"><use href="#i-download"/></svg> Télécharger</a>
+                            <a id="v-share" href="#" target="_blank" rel="noopener" class="btn btn-light"><svg class="icon"><use href="#i-share"/></svg> Partager sur WhatsApp</a>
+                        </div>
+                    </div>
+                </div>
+
+                <ol class="wz-playlist" id="playlist">
+                    <!-- Rempli par app.js -->
+                </ol>
+            </div>
+        </div>
+    </section>
+
+    <section id="avantages" class="section section-alt">
+        <div class="container">
+            <div class="section-head">
+                <span class="section-kicker">Pourquoi une Wi-Fi zone ?</span>
+                <h2 class="section-title">Une connexion partagée, une activité qui rapporte</h2>
+                <p>Une Wi-Fi zone permet de revendre une connexion internet par tickets à tout un quartier, une école, un marché ou un lieu public.</p>
+            </div>
+            <div class="skills-grid">
+                <article class="skill-card">
+                    <div class="skill-icon"><svg class="icon"><use href="#i-coins"/></svg></div>
+                    <h3>Un revenu régulier</h3>
+                    <p>Chaque ticket vendu est payé d'avance. Vous fixez vos forfaits : une heure, une journée, une semaine.</p>
+                </article>
+                <article class="skill-card">
+                    <div class="skill-icon"><svg class="icon"><use href="#i-users"/></svg></div>
+                    <h3>Internet pour tout le quartier</h3>
+                    <p>Les clients se connectent avec leur propre téléphone, sans abonnement ni carte SIM spéciale.</p>
+                </article>
+                <article class="skill-card">
+                    <div class="skill-icon"><svg class="icon"><use href="#i-ticket"/></svg></div>
+                    <h3>Vous gardez le contrôle</h3>
+                    <p>Sans ticket valide, pas d'accès. Le temps est décompté automatiquement et le débit est partagé équitablement.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section id="offre" class="section">
+        <div class="container wz-offer">
+            <div>
+                <span class="section-kicker">Mon offre</span>
+                <h2 class="section-title">Je m'occupe de tout, de l'étude à la maintenance</h2>
+                <p class="wz-muted">Technicien réseau formé à l'Université Polytechnique de Mongo, j'installe et j'entretiens des réseaux Wi-Fi depuis 2021. Je vous accompagne à chaque étape, puis je reste joignable en cas de souci.</p>
+                <a href="#contact" class="btn">Demander un devis <svg class="icon"><use href="#i-arrow"/></svg></a>
+            </div>
+            <ol class="wz-timeline">
+                <li><strong>Étude du site</strong><span>Zone à couvrir, hauteur disponible, obstacles, type de connexion internet.</span></li>
+                <li><strong>Conseil sur le matériel</strong><span>Routeur hotspot, antennes et câbles adaptés à votre budget et à la surface.</span></li>
+                <li><strong>Installation</strong><span>Pose des antennes en hauteur, câblage propre et protection du matériel.</span></li>
+                <li><strong>Configuration</strong><span>Réseau Wi-Fi, page de connexion, forfaits, limite de débit et sécurité.</span></li>
+                <li><strong>Formation du gérant</strong><span>Créer et imprimer les tickets, suivre les clients et les ventes.</span></li>
+                <li><strong>Maintenance</strong><span>Dépannage, mises à jour et extension de la couverture si besoin.</span></li>
+            </ol>
+        </div>
+    </section>
+
+    <section id="faq" class="section section-alt">
+        <div class="container wz-faq-wrap">
+            <div class="section-head">
+                <span class="section-kicker">Questions fréquentes</span>
+                <h2 class="section-title">Vous vous demandez peut-être…</h2>
+            </div>
+            <div class="wz-faq">
+                <details>
+                    <summary>Quelle connexion internet faut-il au départ ?</summary>
+                    <p>Une connexion stable : fibre, box 4G ou internet par satellite selon ce qui est disponible chez vous. Plus elle est rapide, plus vous pouvez accueillir de clients en même temps. Je vous aide à choisir lors de l'étude du site.</p>
+                </details>
+                <details>
+                    <summary>Jusqu'où le signal peut-il porter ?</summary>
+                    <p>Cela dépend des antennes, de leur hauteur et des obstacles (bâtiments, arbres). Une antenne bien placée couvre une cour ou une rue ; plusieurs antennes permettent de couvrir un quartier. L'étude du site sert justement à le prévoir.</p>
+                </details>
+                <details>
+                    <summary>Les clients ont-ils besoin d'une application ?</summary>
+                    <p>Non. Ils activent le Wi-Fi de leur téléphone, choisissent le réseau de la zone, et une page de connexion s'ouvre toute seule pour saisir le code du ticket. C'est ce que montre la <a href="#video-connexion" data-play="connexion">vidéo 2</a>.</p>
+                </details>
+                <details>
+                    <summary>Comment sont créés les tickets ?</summary>
+                    <p>Le gérant les génère par lots depuis l'interface du routeur, puis les imprime ou les envoie par message. Chaque code ne fonctionne que pour la durée prévue. Je forme le gérant à le faire seul.</p>
+                </details>
+                <details>
+                    <summary>Combien coûte une installation ?</summary>
+                    <p>Le prix dépend de la surface à couvrir, du nombre d'antennes et du matériel choisi. Contactez-moi : après une courte visite, je vous propose un devis détaillé.</p>
+                </details>
+                <details>
+                    <summary>Et en cas de panne ?</summary>
+                    <p>Je reste joignable par téléphone et WhatsApp pour le dépannage. Beaucoup de réglages peuvent être vérifiés à distance ; sinon, je me déplace.</p>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="section contact">
+        <div class="container wz-cta">
+            <span class="section-kicker">Contact</span>
+            <h2 class="section-title">Vous voulez ouvrir votre Wi-Fi zone ?</h2>
+            <p>Décrivez-moi votre lieu (quartier, école, commerce…) et je vous réponds rapidement avec une proposition.</p>
+            <div class="hero-actions wz-cta-actions">
+                <a href="https://wa.me/23560335886?text=Bonjour%2C%20je%20souhaite%20installer%20une%20Wi-Fi%20zone." class="btn" target="_blank" rel="noopener"><svg class="icon"><use href="#i-chat"/></svg> Écrire sur WhatsApp</a>
+                <a href="tel:+23560335886" class="btn btn-outline"><svg class="icon"><use href="#i-phone"/></svg> +235 60 33 58 86</a>
+            </div>
+            <ul class="contact-list wz-cta-list">
+                <li><svg class="icon"><use href="#i-mail"/></svg><a href="mailto:daounagontran@gmail.com?subject=Installation%20d%27une%20Wi-Fi%20zone">daounagontran@gmail.com</a></li>
+                <li><svg class="icon"><use href="#i-pin"/></svg>N'Djamena, Tchad</li>
+            </ul>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <a href="../" class="logo"><span class="logo-mark">DG</span><span>DAOUNA Gontran</span></a>
+            <div class="social-links">
+                <a href="mailto:daounagontran@gmail.com" title="E-mail" aria-label="E-mail"><svg class="icon"><use href="#i-mail"/></svg></a>
+                <a href="https://www.linkedin.com/in/daouna-gontran-2043b72b0" title="LinkedIn" aria-label="LinkedIn" target="_blank" rel="noopener"><svg class="icon"><use href="#i-linkedin"/></svg></a>
+                <a href="https://wa.me/23560335886" title="WhatsApp" aria-label="WhatsApp" target="_blank" rel="noopener"><svg class="icon"><use href="#i-chat"/></svg></a>
+                <a href="tel:+23560335886" title="Téléphone" aria-label="Téléphone"><svg class="icon"><use href="#i-phone"/></svg></a>
+            </div>
+            <p>&copy; <span id="year">2026</span> DAOUNA Gontran. Tous droits réservés. · <a href="../">Retour au portfolio</a></p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>

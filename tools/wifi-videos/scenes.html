@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Scènes des vidéos Wi-Fi Zone</title>
+<style>
+    body { margin: 0; background: #111; display: grid; place-items: center; min-height: 100vh; font-family: Inter, sans-serif; color: #fff; }
+    canvas { width: 960px; max-width: 100%; height: auto; }
+    .bar { display: flex; gap: 8px; margin: 12px 0; }
+</style>
+</head>
+<body>
+<!-- Aperçu : scenes.html?v=principe (barre d'espace pour pause). Le rendu MP4 se fait avec render.js. -->
+<div>
+    <canvas id="c" width="1280" height="720"></canvas>
+    <div class="bar" id="bar"></div>
+</div>
+<script>
+const W = 1280, H = 720;
+const C = {
+    navy: '#0b1f3a', navy2: '#13294b', blue: '#1d4ed8', sky: '#3b82f6',
+    gold: '#e0a526', goldDark: '#c98f16', cream: '#faf7f0', text: '#0f172a',
+    muted: '#5b6b82', border: '#e4e8ef', green: '#16a34a', red: '#dc2626', white: '#ffffff'
+};
+const ctx = document.getElementById('c').getContext('2d');
+
+// ---------- Outils ----------
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const seg = (p, a, b) => clamp((p - a) / (b - a));
+const ease = x => x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+const easeOut = x => 1 - Math.pow(1 - x, 3);
+const back = x => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); };
+const lerp = (a, b, t) => a + (b - a) * t;
+
+function rr(x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+}
+function fillRR(x, y, w, h, r, fill, stroke, lw = 2) {
+    rr(x, y, w, h, r);
+    if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+    if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = lw; ctx.stroke(); }
+}
+function txt(s, x, y, o = {}) {
+    ctx.font = `${o.weight || 500} ${o.size || 24}px ${o.font || 'Inter'}`;
+    ctx.fillStyle = o.color || C.text;
+    ctx.textAlign = o.align || 'left';
+    ctx.textBaseline = o.base || 'alphabetic';
+    ctx.fillText(s, x, y);
+}
+function circle(x, y, r, fill, stroke, lw = 2) {
+    ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2);
+    if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+    if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = lw; ctx.stroke(); }
+}
+function line(x1, y1, x2, y2, color, lw = 3, dash) {
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2);
+    ctx.strokeStyle = color; ctx.lineWidth = lw; ctx.lineCap = 'round';
+    ctx.setLineDash(dash || []); ctx.stroke(); ctx.setLineDash([]);
+}
+function withAlpha(a, fn) { ctx.save(); ctx.globalAlpha *= clamp(a); fn(); ctx.restore(); }
+function pop(x, y, k, fn) { // apparition avec effet de rebond autour de (x, y)
+    if (k <= 0) return;
+    ctx.save(); ctx.translate(x, y); const s = back(clamp(k)); ctx.scale(s, s); ctx.translate(-x, -y);
+    ctx.globalAlpha *= clamp(k * 2); fn(); ctx.restore();
+}
+function shadow(fn, blur = 24, oy = 8) {
+    ctx.save(); ctx.shadowColor = 'rgba(15,23,42,0.16)'; ctx.shadowBlur = blur; ctx.shadowOffsetY = oy; fn(); ctx.restore();
+}
+
+// ---------- Icônes ----------
+function cloud(x, y, s = 1) {
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+    shadow(() => {
+        ctx.beginPath();
+        ctx.arc(-50, 10, 38, 0, Math.PI * 2);
+        ctx.arc(0, -15, 52, 0, Math.PI * 2);
+        ctx.arc(55, 8, 40, 0, Math.PI * 2);
+        ctx.rect(-50, 10, 105, 38);
+        ctx.fillStyle = C.white; ctx.fill();
+    });
+    ctx.beginPath(); ctx.arc(0, -2, 22, 0, Math.PI * 2); ctx.strokeStyle = C.blue; ctx.lineWidth = 3; ctx.stroke();
+    ctx.beginPath(); ctx.ellipse(0, -2, 9, 22, 0, 0, Math.PI * 2); ctx.stroke();
+    line(-22, -2, 22, -2, C.blue, 3);
+    ctx.restore();
+}
+function router(x, y, t, label = 'Routeur hotspot') {
+    line(x + 30, y, x + 18, y - 42, C.navy, 5);
+    line(x + 150, y, x + 162, y - 42, C.navy, 5);
+    shadow(() => fillRR(x, y, 180, 64, 14, C.navy));
+    for (let i = 0; i < 5; i++) {
+        const on = Math.sin(t * 9 + i * 1.7) > -0.3;
+        circle(x + 34 + i * 22, y + 32, 6, on ? '#4ade80' : '#166534');
+    }
+    if (label) txt(label, x + 90, y + 98, { size: 22, weight: 600, align: 'center', color: C.navy });
+}
+function wifiWaves(x, y, t, color = C.blue, maxR = 140, a0 = -Math.PI * 0.8, a1 = -Math.PI * 0.2) {
+    for (let i = 0; i < 3; i++) {
+        const ph = ((t * 0.7 + i / 3) % 1);
+        const r = 20 + ph * maxR;
+        ctx.beginPath(); ctx.arc(x, y, r, a0, a1);
+        ctx.strokeStyle = color; ctx.globalAlpha = (1 - ph) * 0.8; ctx.lineWidth = 5; ctx.lineCap = 'round'; ctx.stroke();
+        ctx.globalAlpha = 1;
+    }
+}
+function wifiIcon(x, y, s, color) {
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+    for (let i = 1; i <= 3; i++) {
+        ctx.beginPath(); ctx.arc(0, 0, i * 14, -Math.PI * 0.75, -Math.PI * 0.25);
+        ctx.strokeStyle = color; ctx.lineWidth = 5; ctx.lineCap = 'round'; ctx.stroke();
+    }
+    circle(0, 0, 4, color);
+    ctx.restore();
+}
+function mast(x, base, h, t, waves = true) {
+    const top = base - h;
+    line(x, base, x, top, '#64748b', 8);
+    for (let yy = base - 30; yy > top + 20; yy -= 40) { line(x - 14, yy, x + 14, yy - 30, '#94a3b8', 2); line(x + 14, yy, x - 14, yy - 30, '#94a3b8', 2); }
+    fillRR(x - 16, top - 10, 32, 70, 8, C.white, C.navy, 3);
+    line(x - 8, top + 8, x + 8, top + 8, C.navy, 2); line(x - 8, top + 20, x + 8, top + 20, C.navy, 2);
+    if (waves) { wifiWaves(x + 10, top + 20, t, C.blue, 160, -Math.PI * 0.45, Math.PI * 0.45); wifiWaves(x - 10, top + 20, t + 0.5, C.blue, 160, Math.PI * 0.55, Math.PI * 1.45); }
+}
+function phone(x, y, w, h, screenFn) {
+    shadow(() => fillRR(x, y, w, h, w * 0.14, '#111827'), 30, 12);
+    const m = w * 0.05;
+    ctx.save(); rr(x + m, y + m, w - 2 * m, h - 2 * m, w * 0.1); ctx.clip();
+    ctx.fillStyle = C.white; ctx.fillRect(x + m, y + m, w - 2 * m, h - 2 * m);
+    if (screenFn) screenFn(x + m, y + m, w - 2 * m, h - 2 * m);
+    ctx.restore();
+    fillRR(x + w / 2 - w * 0.14, y + m + 6, w * 0.28, 10, 5, '#111827');
+}
+function smallPhone(x, y, status, k = 1) {
+    pop(x, y, k, () => {
+        phone(x - 26, y - 46, 52, 92, (sx, sy, sw, sh) => {
+            ctx.fillStyle = '#eef2ff'; ctx.fillRect(sx, sy, sw, sh);
+            wifiIcon(sx + sw / 2, sy + sh / 2 + 10, 0.55, status === 'ok' ? C.blue : '#94a3b8');
+        });
+        if (status === 'ok') { circle(x + 26, y - 44, 16, C.green); ctx.save(); ctx.strokeStyle = '#fff'; ctx.lineWidth = 4; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(x + 18, y - 44); ctx.lineTo(x + 24, y - 38); ctx.lineTo(x + 34, y - 50); ctx.stroke(); ctx.restore(); }
+        if (status === 'lock') { circle(x + 26, y - 44, 16, C.red); lockGlyph(x + 26, y - 44, 0.6, '#fff'); }
+    });
+}
+function lockGlyph(x, y, s, color) {
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+    ctx.beginPath(); ctx.arc(0, -6, 9, Math.PI, 0); ctx.strokeStyle = color; ctx.lineWidth = 4; ctx.stroke();
+    fillRR(-13, -6, 26, 20, 4, color);
+    ctx.restore();
+}
+function checkGlyph(x, y, s, color = '#fff', lw = 5) {
+    ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = lw; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    ctx.beginPath(); ctx.moveTo(x - 12 * s, y); ctx.lineTo(x - 3 * s, y + 9 * s); ctx.lineTo(x + 14 * s, y - 10 * s); ctx.stroke(); ctx.restore();
+}
+function person(x, y, s = 1, color = C.blue, shirt) {
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+    circle(0, -70, 22, '#8d5524');
+    ctx.beginPath(); ctx.moveTo(-36, 0); ctx.quadraticCurveTo(-36, -44, 0, -44); ctx.quadraticCurveTo(36, -44, 36, 0); ctx.closePath();
+    ctx.fillStyle = shirt || color; ctx.fill();
+    ctx.restore();
+}
+function ticket(x, y, w, h, code, duration) {
+    shadow(() => fillRR(x, y, w, h, 14, C.white));
+    fillRR(x, y, w, 44, 14, C.gold); ctx.fillStyle = C.gold; ctx.fillRect(x, y + 24, w, 20);
+    wifiIcon(x + 30, y + 34, 0.45, C.navy);
+    txt(w < 280 ? 'WI-FI' : 'TICKET WI-FI', x + 52, y + 30, { size: 18, weight: 700, color: C.navy });
+    txt(duration, x + w - 16, y + 30, { size: 16, weight: 600, color: C.navy, align: 'right' });
+    line(x + 16, y + 62, x + w - 16, y + 62, C.border, 2, [6, 6]);
+    txt('Code', x + 18, y + 92, { size: 15, weight: 500, color: C.muted });
+    txt(code, x + 18, y + h - 22, { size: Math.min(34, h * 0.28), weight: 800, color: C.navy, font: 'JetBrains Mono' });
+}
+function house(x, y, w, h, color = '#cbd5e1', roof = '#94a3b8') {
+    ctx.fillStyle = color; ctx.fillRect(x, y, w, h);
+    ctx.beginPath(); ctx.moveTo(x - 8, y); ctx.lineTo(x + w / 2, y - h * 0.55); ctx.lineTo(x + w + 8, y); ctx.closePath(); ctx.fillStyle = roof; ctx.fill();
+    ctx.fillStyle = '#64748b'; ctx.fillRect(x + w / 2 - 8, y + h - 26, 16, 26);
+}
+function tree(x, y, s = 1) {
+    ctx.fillStyle = '#92400e'; ctx.fillRect(x - 5 * s, y - 20 * s, 10 * s, 24 * s);
+    circle(x, y - 38 * s, 26 * s, '#16a34a');
+}
+function laptop(x, y, w, screenFn) {
+    const h = w * 0.62;
+    shadow(() => fillRR(x, y, w, h, 12, '#1f2937'));
+    ctx.save(); rr(x + 12, y + 12, w - 24, h - 24, 6); ctx.clip();
+    ctx.fillStyle = '#0f172a'; ctx.fillRect(x + 12, y + 12, w - 24, h - 24);
+    if (screenFn) screenFn(x + 12, y + 12, w - 24, h - 24);
+    ctx.restore();
+    ctx.beginPath(); ctx.moveTo(x - 30, y + h); ctx.lineTo(x + w + 30, y + h); ctx.lineTo(x + w + 10, y + h + 22); ctx.lineTo(x - 10, y + h + 22); ctx.closePath();
+    ctx.fillStyle = '#9ca3af'; ctx.fill();
+}
+function packetsAlong(x1, y1, x2, y2, t, color = C.gold, n = 3, speed = 0.6) {
+    for (let i = 0; i < n; i++) {
+        const k = (t * speed + i / n) % 1;
+        circle(lerp(x1, x2, k), lerp(y1, y2, k), 7, color);
+    }
+}
+function badge(x, y, r, color, glyph) {
+    circle(x, y, r, color);
+    if (glyph === 'check') checkGlyph(x, y, r / 22, '#fff', r / 4.5);
+    if (glyph === 'lock') lockGlyph(x, y + 2, r / 24, '#fff');
+}
+
+// ---------- Habillage commun ----------
+function background() {
+    const g = ctx.createLinearGradient(0, 0, 0, H);
+    g.addColorStop(0, '#f8fafc'); g.addColorStop(1, '#eef2f8');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = 'rgba(29,78,216,0.05)';
+    for (let x = 40; x < W; x += 40) for (let y = 40; y < H; y += 40) ctx.fillRect(x, y, 2, 2);
+}
+function header(video) {
+    fillRR(36, 28, 44, 44, 10, C.navy);
+    txt('DG', 58, 57, { size: 18, weight: 800, color: C.gold, align: 'center' });
+    txt(video.title, 94, 57, { size: 20, weight: 600, color: C.navy });
+    fillRR(W - 170, 30, 134, 40, 20, 'rgba(11,31,58,0.06)');
+    txt(`Vidéo ${video.num} / 4`, W - 103, 57, { size: 17, weight: 600, color: C.navy, align: 'center' });
+}
+function caption(step, text, lt) {
+    const k = easeOut(seg(lt, 0, 0.5));
+    const y = H - 104 + (1 - k) * 30;
+    withAlpha(k, () => {
+        shadow(() => fillRR(60, y, W - 120, 76, 18, C.navy), 20, 6);
+        if (step) {
+            circle(108, y + 38, 22, C.gold);
+            txt(String(step), 108, y + 47, { size: 24, weight: 800, color: C.navy, align: 'center' });
+        }
+        txt(text, step ? 146 : 96, y + 47, { size: 27, weight: 600, color: C.white });
+    });
+}
+function titleCard(video, lt, d) {
+    ctx.fillStyle = C.navy; ctx.fillRect(0, 0, W, H);
+    ctx.save(); ctx.globalAlpha = 0.18; wifiWaves(W - 220, H - 120, lt * 0.8, C.gold, 360); ctx.restore();
+    const k = easeOut(seg(lt, 0.1, 0.9));
+    withAlpha(k, () => {
+        txt(`WI-FI ZONE · VIDÉO ${video.num} SUR 4`, 120, 280 - (1 - k) * 20, { size: 22, weight: 700, color: C.gold });
+        txt(video.title, 120, 360 - (1 - k) * 20, { size: 64, weight: 800, color: C.white, font: 'Inter Display' });
+        txt(video.subtitle, 120, 420 - (1 - k) * 20, { size: 28, weight: 400, color: '#cbd5e1' });
+    });
+    withAlpha(seg(lt, 0.8, 1.4), () => { fillRR(120, 470, 80, 6, 3, C.gold); });
+    withAlpha(seg(lt, d - 0.4, d), () => { ctx.fillStyle = '#f8fafc'; ctx.fillRect(0, 0, W, H); });
+}
+function endCard(video, lt) {
+    ctx.fillStyle = C.navy; ctx.fillRect(0, 0, W, H);
+    const k = easeOut(seg(lt, 0, 0.8));
+    withAlpha(k, () => {
+        fillRR(W / 2 - 44, 150, 88, 88, 20, C.gold);
+        txt('DG', W / 2, 208, { size: 34, weight: 800, color: C.navy, align: 'center' });
+        txt('DAOUNA Gontran', W / 2, 310, { size: 52, weight: 800, color: C.white, align: 'center', font: 'Inter Display' });
+        txt('Installation et maintenance de Wi-Fi zones · N\'Djamena', W / 2, 360, { size: 26, weight: 400, color: '#cbd5e1', align: 'center' });
+    });
+    withAlpha(easeOut(seg(lt, 0.6, 1.4)), () => {
+        fillRR(W / 2 - 250, 420, 500, 70, 35, 'rgba(224,165,38,0.14)', C.gold, 2);
+        txt('+235 60 33 58 86  ·  WhatsApp', W / 2, 466, { size: 28, weight: 700, color: C.gold, align: 'center' });
+        txt('daounagontran@gmail.com', W / 2, 540, { size: 22, weight: 500, color: '#cbd5e1', align: 'center' });
+        if (video.next) txt(`À suivre : ${video.next}`, W / 2, 620, { size: 20, weight: 500, color: '#94a3b8', align: 'center' });
+    });
+}
+
+// ---------- Vidéo 1 : le principe ----------
+function principe(stage, lt, t) {
+    const k = easeOut(seg(lt, 0, 1.2));
+    const kk = s => stage > s ? 1 : stage === s ? k : 0;
+    // 1. Internet
+    pop(210, 250, kk(1), () => {
+        cloud(210, 250, 1.1);
+        txt('Internet', 210, 350, { size: 26, weight: 700, align: 'center', color: C.navy });
+        txt('Fibre · 4G · Satellite', 210, 382, { size: 19, weight: 500, align: 'center', color: C.muted });
+    });
+    // 2. Routeur
+    if (stage >= 2) {
+        const d = stage > 2 ? 1 : ease(seg(lt, 0.2, 1.4));
+        line(300, 270, lerp(300, 440, d), lerp(270, 300, d), C.navy, 4);
+        if (d >= 1) packetsAlong(300, 270, 440, 300, t);
+        pop(530, 300, kk(2) * (stage > 2 ? 1 : seg(lt, 0.8, 1.6) * 2), () => router(440, 270, t));
+        if (stage === 2) withAlpha(seg(lt, 2, 2.6), () => {
+            fillRR(395, 410, 270, 92, 14, C.white, C.border);
+            txt('• Contrôle les tickets', 415, 446, { size: 19, weight: 500, color: C.text });
+            txt('• Partage le débit', 415, 478, { size: 19, weight: 500, color: C.text });
+        });
+    }
+    // 3. Antenne
+    if (stage >= 3) {
+        const d = stage > 3 ? 1 : ease(seg(lt, 0.1, 1.2));
+        line(620, 320, lerp(620, 800, d), lerp(320, 560, d) , C.navy, 4, [10, 8]);
+        const h = 340 * (stage > 3 ? 1 : ease(seg(lt, 0.6, 1.8)));
+        if (h > 10) mast(800, 560, h, t, h > 330);
+        line(740, 560, 860, 560, '#94a3b8', 4);
+        if (h > 330) txt('Antennes Wi-Fi', 800, 600, { size: 22, weight: 600, align: 'center', color: C.navy });
+    }
+    // 4. Clients
+    if (stage >= 4) {
+        const ph = [[1010, 220, 'ok'], [1130, 330, 'ok'], [990, 430, 'ok'], [1150, 500, 'lock']];
+        ph.forEach(([x, y, s], i) => smallPhone(x, y, s, stage > 4 ? 1 : seg(lt, 0.3 + i * 0.5, 1.0 + i * 0.5)));
+        withAlpha(seg(lt, 2.6, 3.2), () => {
+            txt('Ticket valide', 1040, 140, { size: 20, weight: 700, color: C.green, align: 'center' });
+            txt('Sans ticket', 1150, 580, { size: 20, weight: 700, color: C.red, align: 'center' });
+        });
+    }
+}
+
+// ---------- Vidéo 2 : se connecter ----------
+const CODE = '4827 51';
+function screenHome(x, y, w, h) {
+    const g = ctx.createLinearGradient(x, y, x, y + h); g.addColorStop(0, '#1e3a8a'); g.addColorStop(1, '#0b1f3a');
+    ctx.fillStyle = g; ctx.fillRect(x, y, w, h);
+    txt('10:24', x + w / 2, y + 90, { size: 44, weight: 300, color: '#fff', align: 'center' });
+    const cols = ['#f59e0b', '#22c55e', '#3b82f6', '#ef4444', '#a855f7', '#14b8a6', '#eab308', '#ec4899'];
+    for (let i = 0; i < 8; i++) fillRR(x + 26 + (i % 4) * 54, y + 170 + Math.floor(i / 4) * 64, 40, 40, 10, cols[i]);
+}
+function screenWifi(x, y, w, h, p) {
+    ctx.fillStyle = '#f1f5f9'; ctx.fillRect(x, y, w, h);
+    txt('Wi-Fi', x + 20, y + 70, { size: 28, weight: 700 });
+    fillRR(x + 14, y + 92, w - 28, 52, 12, '#fff');
+    txt('Activé', x + 30, y + 125, { size: 18, weight: 500 });
+    const on = seg(p, 0.05, 0.2);
+    fillRR(x + w - 80, y + 104, 52, 28, 14, on > 0.5 ? C.green : '#cbd5e1');
+    circle(x + w - 66 + on * 24, y + 118, 11, '#fff');
+    txt('RÉSEAUX DISPONIBLES', x + 22, y + 178, { size: 13, weight: 600, color: C.muted });
+    const nets = ['WIFI-ZONE', 'Voisin_123', 'Box-7A2F'];
+    nets.forEach((n, i) => withAlpha(seg(p, 0.2 + i * 0.08, 0.3 + i * 0.08), () => {
+        const yy = y + 192 + i * 58;
+        const sel = i === 0 && p > 0.62;
+        fillRR(x + 14, yy, w - 28, 50, 12, sel ? '#dbeafe' : '#fff', sel ? C.blue : null);
+        wifiIcon(x + 38, yy + 34, 0.4, i === 0 ? C.blue : '#94a3b8');
+        txt(n, x + 60, yy + 32, { size: 18, weight: i === 0 ? 700 : 500 });
+        if (i > 0) lockGlyph(x + w - 40, yy + 26, 0.45, '#94a3b8');
+    }));
+    if (p > 0.62) txt(p > 0.8 ? '✓ Connecté à WIFI-ZONE' : 'Connexion…', x + w / 2, y + 392, { size: 15, weight: 700, color: p > 0.8 ? C.green : C.blue, align: 'center' });
+    const tap = seg(p, 0.5, 0.65);
+    if (tap > 0 && tap < 1) { circle(x + 110, y + 217, 18 + tap * 22, `rgba(29,78,216,${0.35 * (1 - tap)})`); circle(x + 110, y + 217, 14, 'rgba(29,78,216,0.35)'); }
+}
+function screenPortal(x, y, w, h, p) {
+    ctx.fillStyle = '#fff'; ctx.fillRect(x, y, w, h);
+    ctx.fillStyle = C.navy; ctx.fillRect(x, y, w, 150);
+    wifiIcon(x + w / 2, y + 92, 0.8, C.gold);
+    txt('WIFI-ZONE', x + w / 2, y + 132, { size: 20, weight: 800, color: '#fff', align: 'center' });
+    txt('Bienvenue !', x + w / 2, y + 196, { size: 24, weight: 700, align: 'center' });
+    txt('Saisissez le code de', x + w / 2, y + 226, { size: 15, weight: 400, color: C.muted, align: 'center' });
+    txt('votre ticket', x + w / 2, y + 246, { size: 15, weight: 400, color: C.muted, align: 'center' });
+    const n = Math.floor(seg(p, 0.15, 0.6) * CODE.length + 0.001);
+    fillRR(x + 20, y + 270, w - 40, 54, 12, '#f8fafc', p > 0.12 && p < 0.7 ? C.blue : C.border, 2);
+    txt(CODE.slice(0, n), x + w / 2, y + 306, { size: 26, weight: 700, align: 'center', font: 'JetBrains Mono' });
+    if (p > 0.12 && p < 0.7 && Math.floor(p * 40) % 2 === 0) {
+        ctx.font = '700 26px JetBrains Mono'; const tw = ctx.measureText(CODE.slice(0, n)).width;
+        line(x + w / 2 + tw / 2 + 3, y + 284, x + w / 2 + tw / 2 + 3, y + 312, C.blue, 2);
+    }
+    const pressed = p > 0.75 && p < 0.85;
+    fillRR(x + 20, y + 342 + (pressed ? 2 : 0), w - 40, 52, 12, pressed ? C.goldDark : C.gold);
+    txt('Se connecter', x + w / 2, y + 375 + (pressed ? 2 : 0), { size: 19, weight: 700, color: C.navy, align: 'center' });
+}
+function fmt(sec) { sec = Math.max(0, Math.round(sec)); return `${String(Math.floor(sec / 60)).padStart(2, '0')}:${String(sec % 60).padStart(2, '0')}`; }
+function screenConnected(x, y, w, h, remaining, expired) {
+    ctx.fillStyle = '#fff'; ctx.fillRect(x, y, w, h);
+    if (expired) {
+        ctx.fillStyle = '#fef2f2'; ctx.fillRect(x, y, w, h);
+        badge(x + w / 2, y + 150, 44, C.red, 'lock');
+        txt('Ticket expiré', x + w / 2, y + 240, { size: 26, weight: 800, align: 'center', color: C.red });
+        txt('Achetez un nouveau', x + w / 2, y + 280, { size: 17, weight: 500, align: 'center', color: C.muted });
+        txt('ticket pour continuer', x + w / 2, y + 304, { size: 17, weight: 500, align: 'center', color: C.muted });
+        return;
+    }
+    badge(x + w / 2, y + 130, 44, C.green, 'check');
+    txt('Vous êtes connecté', x + w / 2, y + 220, { size: 19, weight: 800, align: 'center' });
+    fillRR(x + 20, y + 250, w - 40, 110, 16, '#f1f5f9');
+    txt('Temps restant', x + w / 2, y + 285, { size: 15, weight: 600, color: C.muted, align: 'center' });
+    txt(fmt(remaining), x + w / 2, y + 336, { size: 44, weight: 800, align: 'center', font: 'JetBrains Mono', color: remaining < 60 ? C.red : C.navy });
+    txt('Forfait : 1 heure', x + w / 2, y + 400, { size: 16, weight: 500, align: 'center', color: C.muted });
+}
+const PX = 860, PY = 70, PW = 260, PH = 500;
+function connexion(step, lt, t, d) {
+    const p = lt / d;
+    // Partie gauche : illustration
+    const k = easeOut(seg(lt, 0, 0.9));
+    withAlpha(k, () => {
+        if (step === 1) {
+            // Kiosque de vente
+            fillRR(120, 200, 300, 220, 16, C.white, C.border);
+            ctx.fillStyle = C.gold; ctx.fillRect(120, 200, 300, 50); fillRR(120, 200, 300, 50, 16, C.gold);
+            txt('VENTE DE TICKETS', 270, 233, { size: 20, weight: 800, color: C.navy, align: 'center' });
+            person(200, 400, 1.2, C.blue, '#0e7490');
+            txt('1 heure · 1 jour · 1 semaine', 270, 460, { size: 20, weight: 600, color: C.muted, align: 'center' });
+            const s = ease(seg(lt, 1.2, 2.8));
+            ticket(lerp(300, 470, s), lerp(300, 180, s), 300, 170, CODE, '1 heure');
+        }
+        if (step === 2) {
+            circle(320, 300, 130, '#dbeafe');
+            wifiIcon(320, 350, 3.2, C.blue);
+            txt('Réseau : WIFI-ZONE', 320, 500, { size: 28, weight: 700, color: C.navy, align: 'center' });
+        }
+        if (step === 3) {
+            ticket(150, 190, 360, 200, CODE, '1 heure');
+            const hl = seg(lt, 0.8, 1.6);
+            ctx.save(); ctx.globalAlpha = 0.5 * hl; fillRR(160, 320, 220, 58, 10, null, C.blue, 4); ctx.restore();
+            withAlpha(hl, () => {
+                line(520, 330, 640, 330, C.blue, 4, [10, 8]);
+                ctx.beginPath(); ctx.moveTo(660, 330); ctx.lineTo(640, 318); ctx.lineTo(640, 342); ctx.closePath(); ctx.fillStyle = C.blue; ctx.fill();
+            });
+        }
+        if (step === 4) {
+            circle(320, 300, 130, '#dcfce7');
+            ctx.save(); ctx.translate(320, 300);
+            ctx.beginPath(); ctx.arc(0, 0, 80, 0, Math.PI * 2); ctx.strokeStyle = C.green; ctx.lineWidth = 6; ctx.stroke();
+            ctx.beginPath(); ctx.ellipse(0, 0, 34, 80, 0, 0, Math.PI * 2); ctx.stroke();
+            line(-80, 0, 80, 0, C.green, 6); line(-70, -38, 70, -38, C.green, 4); line(-70, 38, 70, 38, C.green, 4);
+            ctx.restore();
+            txt('Navigation, messages, appels, vidéos…', 320, 500, { size: 24, weight: 600, color: C.navy, align: 'center' });
+        }
+        if (step === 5) {
+            circle(320, 300, 130, '#fee2e2');
+            circle(320, 300, 80, '#fff', C.red, 6);
+            const a = -Math.PI / 2 + seg(lt, 0, 2.5) * Math.PI * 2;
+            line(320, 300, 320 + Math.cos(a) * 60, 300 + Math.sin(a) * 60, C.red, 6);
+            line(320, 300, 320, 250, C.red, 6);
+            circle(320, 300, 7, C.red);
+            txt('Le temps est décompté automatiquement', 320, 500, { size: 24, weight: 600, color: C.navy, align: 'center' });
+        }
+    });
+    // Téléphone
+    phone(PX, PY, PW, PH, (x, y, w, h) => {
+        if (step === 1) screenHome(x, y, w, h);
+        if (step === 2) screenWifi(x, y, w, h, p);
+        if (step === 3) screenPortal(x, y, w, h, p);
+        if (step === 4) screenConnected(x, y, w, h, 3600 - seg(lt, 0.8, d) * 312);
+        if (step === 5) {
+            const rem = 3 - seg(lt, 0.3, 2.2) * 3;
+            screenConnected(x, y, w, h, rem, lt > 2.4);
+        }
+    });
+}
+
+// ---------- Vidéo 3 : installation ----------
+function installation(step, lt, t, d) {
+    const k = easeOut(seg(lt, 0, 0.9));
+    withAlpha(k, () => {
+        if (step === 1) {
+            fillRR(140, 110, 1000, 460, 24, '#ecfdf5', '#bbf7d0');
+            ctx.save(); rr(140, 110, 1000, 460, 24); ctx.clip();
+            const hs = [[220, 180], [330, 420], [470, 200], [620, 470], [780, 170], [900, 400], [1010, 230], [420, 330], [760, 330], [1040, 480], [250, 500]];
+            hs.forEach(([x, y]) => house(x, y, 46, 36));
+            tree(560, 300, 1); tree(880, 270, 0.9); tree(300, 290, 0.8);
+            const cx = 640, cy = 340;
+            [1, 2, 3].forEach(i => {
+                const r = ease(seg(lt, 0.6 + i * 0.5, 1.4 + i * 0.5)) * i * 110;
+                if (r > 0) { ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fillStyle = 'rgba(29,78,216,0.07)'; ctx.fill(); ctx.strokeStyle = 'rgba(29,78,216,0.5)'; ctx.lineWidth = 2; ctx.setLineDash([8, 8]); ctx.stroke(); ctx.setLineDash([]); }
+            });
+            ctx.restore();
+            circle(cx, cy, 16, C.gold, C.navy, 4);
+            withAlpha(seg(lt, 3, 3.6), () => {
+                fillRR(cx + 30, cy - 60, 190, 44, 10, C.navy);
+                txt('Zone à couvrir', cx + 125, cy - 31, { size: 18, weight: 700, color: '#fff', align: 'center' });
+                fillRR(530, 140, 150, 40, 10, '#fff', C.red);
+                txt('Obstacle', 605, 167, { size: 17, weight: 700, color: C.red, align: 'center' });
+                line(580, 180, 562, 250, C.red, 2, [5, 5]);
+            });
+        }
+        if (step === 2) {
+            line(100, 560, 1180, 560, '#94a3b8', 4);
+            ctx.fillStyle = '#cbd5e1'; ctx.fillRect(420, 360, 300, 200);
+            for (let i = 0; i < 3; i++) ctx.fillStyle = '#94a3b8', ctx.fillRect(450 + i * 90, 400, 50, 50);
+            ctx.fillStyle = '#64748b'; ctx.fillRect(545, 490, 50, 70);
+            const h = 180 * ease(seg(lt, 0.4, 2.2));
+            if (h > 10) mast(640, 360, h, t, lt > 2.4);
+            person(460, 360, 0.8, C.gold, '#ea580c');
+            withAlpha(seg(lt, 2.6, 3.4), () => {
+                ctx.beginPath(); ctx.arc(640, 200, 120, -0.4, 0.4); ctx.strokeStyle = C.gold; ctx.lineWidth = 4; ctx.setLineDash([8, 8]); ctx.stroke(); ctx.setLineDash([]);
+                fillRR(800, 170, 300, 70, 14, C.white, C.border);
+                txt('En hauteur, orientée', 950, 200, { size: 19, weight: 600, color: C.navy, align: 'center' });
+                txt('vers les clients', 950, 226, { size: 19, weight: 600, color: C.navy, align: 'center' });
+            });
+        }
+        if (step === 3) {
+            laptop(200, 150, 520, (x, y, w, h) => {
+                const lines = [
+                    ['$ ', 'configuration du hotspot', '#94a3b8'],
+                    ['✔ ', 'Réseau Wi-Fi : WIFI-ZONE', '#4ade80'],
+                    ['✔ ', 'Page de connexion : activée', '#4ade80'],
+                    ['✔ ', 'Forfaits : 1 h · 1 jour · 1 semaine', '#4ade80'],
+                    ['✔ ', 'Débit limité par client', '#4ade80'],
+                    ['✔ ', 'Sécurité : mot de passe admin', '#4ade80']
+                ];
+                lines.forEach(([pre, s, col], i) => {
+                    const ch = Math.floor(seg(lt, 0.4 + i * 0.75, 1.0 + i * 0.75) * s.length);
+                    if (ch <= 0) return;
+                    txt(pre, x + 24, y + 44 + i * 42, { size: 19, weight: 600, color: col, font: 'JetBrains Mono' });
+                    txt(s.slice(0, ch), x + 50, y + 44 + i * 42, { size: 19, weight: 500, color: '#e2e8f0', font: 'JetBrains Mono' });
+                });
+            });
+            line(750, 420, 860, 420, C.navy, 4);
+            packetsAlong(750, 420, 860, 420, t, C.gold, 2, 0.8);
+            router(860, 390, t, 'Routeur');
+        }
+        if (step === 4) {
+            phone(260, 90, 230, 440, (x, y, w, h) => {
+                ctx.fillStyle = '#f8fafc'; ctx.fillRect(x, y, w, h);
+                txt('Test du signal', x + w / 2, y + 70, { size: 20, weight: 700, align: 'center' });
+                const n = Math.floor(seg(lt, 0.4, 2.2) * 5 + 0.001);
+                for (let i = 0; i < 5; i++) fillRR(x + 46 + i * 28, y + 210 - i * 24, 20, 30 + i * 24, 4, i < n ? C.green : '#e2e8f0');
+                withAlpha(seg(lt, 2.2, 2.8), () => {
+                    txt('Signal : excellent', x + w / 2, y + 290, { size: 18, weight: 700, color: C.green, align: 'center' });
+                });
+            });
+            // Jauge de débit
+            const cx = 820, cy = 380, r = 170;
+            ctx.beginPath(); ctx.arc(cx, cy, r, Math.PI, 0); ctx.strokeStyle = '#e2e8f0'; ctx.lineWidth = 28; ctx.lineCap = 'round'; ctx.stroke();
+            const v = ease(seg(lt, 0.6, 3)) * 0.78 + Math.sin(lt * 6) * 0.015 * seg(lt, 3, 3.3);
+            ctx.beginPath(); ctx.arc(cx, cy, r, Math.PI, Math.PI + Math.PI * v); ctx.strokeStyle = C.green; ctx.stroke();
+            const a = Math.PI + Math.PI * v;
+            line(cx, cy, cx + Math.cos(a) * (r - 40), cy + Math.sin(a) * (r - 40), C.navy, 6);
+            circle(cx, cy, 14, C.navy);
+            txt('Test du débit', cx, cy + 60, { size: 24, weight: 700, color: C.navy, align: 'center' });
+            withAlpha(seg(lt, 3, 3.5), () => { badge(cx, cy - 80, 26, C.green, 'check'); });
+        }
+        if (step === 5) {
+            person(300, 470, 1.4, C.blue, C.navy);
+            person(980, 470, 1.4, C.blue, '#0e7490');
+            txt('Technicien', 300, 520, { size: 20, weight: 600, color: C.muted, align: 'center' });
+            txt('Gérant', 980, 520, { size: 20, weight: 600, color: C.muted, align: 'center' });
+            laptop(500, 160, 280, (x, y, w, h) => {
+                ctx.fillStyle = '#fff'; ctx.fillRect(x, y, w, h);
+                ctx.fillStyle = C.navy; ctx.fillRect(x, y, w, 30);
+                txt('Tickets', x + 12, y + 21, { size: 14, weight: 700, color: '#fff' });
+                for (let i = 0; i < 4; i++) fillRR(x + 12, y + 42 + i * 26, w - 24, 18, 4, i % 2 ? '#f1f5f9' : '#e0e7ff');
+            });
+            for (let i = 0; i < 3; i++) {
+                const s = ease(seg(lt, 1.2 + i * 0.7, 2.2 + i * 0.7));
+                if (s > 0) ticket(lerp(540, 390 + i * 210, s), lerp(330, 400, s), 200, 120, ['4827 51', '9310 64', '2275 08'][i], '1 jour');
+            }
+        }
+    });
+}
+
+// ---------- Vidéo 4 : gestion ----------
+function codeFor(i) { const n = (i * 7919 + 1301) % 10000; const m = (i * 104729 + 17) % 100; return `${String(n).padStart(4, '0')} ${String(m).padStart(2, '0')}`; }
+function gestion(step, lt, t, d) {
+    const k = easeOut(seg(lt, 0, 0.9));
+    withAlpha(k, () => {
+        if (step === 1) {
+            for (let i = 0; i < 12; i++) {
+                const c = i % 4, r = Math.floor(i / 4);
+                const x = 140 + c * 260, y = 110 + r * 150;
+                pop(x + 110, y + 60, seg(lt, 0.3 + i * 0.18, 0.9 + i * 0.18), () => ticket(x, y, 230, 125, codeFor(i), ['1 heure', '1 jour', '1 semaine'][r]));
+            }
+        }
+        if (step === 2) {
+            fillRR(160, 100, 960, 470, 20, C.white, C.border);
+            ctx.fillStyle = C.navy; rr(160, 100, 960, 70, 20); ctx.fill(); ctx.fillRect(160, 140, 960, 30);
+            txt('Clients connectés', 196, 146, { size: 24, weight: 700, color: '#fff' });
+            const n = Math.min(24, Math.floor(seg(lt, 0.4, 4) * 24));
+            fillRR(940, 116, 150, 40, 20, C.gold);
+            txt(String(n), 1015, 145, { size: 24, weight: 800, color: C.navy, align: 'center' });
+            const rows = Math.min(6, Math.ceil(n / 4));
+            for (let i = 0; i < rows; i++) {
+                const yy = 196 + i * 60;
+                fillRR(190, yy, 900, 48, 10, i % 2 ? '#f8fafc' : '#eef2ff');
+                circle(222, yy + 24, 9, C.green);
+                txt(`Téléphone-${String(i + 1).padStart(2, '0')}`, 246, yy + 31, { size: 19, weight: 600 });
+                txt(codeFor(i), 520, yy + 31, { size: 19, weight: 600, font: 'JetBrains Mono', color: C.muted });
+                txt(['1 heure', '1 jour', '1 heure', '1 semaine', '1 jour', '1 heure'][i], 760, yy + 31, { size: 19, weight: 500, color: C.muted });
+                txt(fmt(1500 + i * 331 - lt * 9), 1060, yy + 31, { size: 19, weight: 700, font: 'JetBrains Mono', align: 'right', color: C.navy });
+            }
+        }
+        if (step === 3) {
+            fillRR(160, 100, 960, 470, 20, C.white, C.border);
+            txt('Tickets vendus cette semaine', 200, 156, { size: 26, weight: 700, color: C.navy });
+            const vals = [32, 41, 38, 47, 55, 72, 64];
+            const days = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
+            line(220, 500, 1080, 500, C.border, 2);
+            vals.forEach((v, i) => {
+                const g = ease(seg(lt, 0.4 + i * 0.25, 1.4 + i * 0.25));
+                const bh = v * 4 * g, x = 250 + i * 118;
+                fillRR(x, 500 - bh, 70, bh, 8, i === 5 ? C.gold : C.blue);
+                txt(days[i], x + 35, 532, { size: 18, weight: 600, color: C.muted, align: 'center' });
+                if (g > 0.95) txt(String(v), x + 35, 490 - bh, { size: 18, weight: 700, color: C.navy, align: 'center' });
+            });
+        }
+        if (step === 4) {
+            router(450, 300, t, 'Votre équipement');
+            ctx.save(); ctx.translate(800, 290); ctx.rotate(Math.sin(lt * 3) * 0.4 - 0.6);
+            fillRR(-14, -10, 28, 150, 10, '#64748b');
+            ctx.beginPath(); ctx.arc(0, -30, 46, 0, Math.PI * 2); ctx.fillStyle = '#64748b'; ctx.fill();
+            ctx.fillStyle = '#eef2f8'; ctx.fillRect(-16, -80, 32, 52);
+            ctx.restore();
+            withAlpha(seg(lt, 2.2, 2.8), () => {
+                badge(640, 180, 34, C.green, 'check');
+                txt('Assistance · Dépannage · Mises à jour', 640, 490, { size: 26, weight: 700, color: C.navy, align: 'center' });
+            });
+        }
+    });
+}
+
+// ---------- Définition des vidéos ----------
+const VIDEOS = {
+    principe: {
+        num: 1, title: 'Comment fonctionne une Wi-Fi zone ?', subtitle: 'Le principe en 30 secondes', next: 'Se connecter avec un ticket',
+        scenes: [
+            { d: 6, step: 1, cap: 'Une connexion internet arrive sur le site.', draw: (lt, t) => principe(1, lt, t) },
+            { d: 6.5, step: 2, cap: 'Elle passe par un routeur hotspot qui gère les accès.', draw: (lt, t) => principe(2, lt, t) },
+            { d: 6, step: 3, cap: 'Des antennes diffusent le Wi-Fi dans le quartier.', draw: (lt, t) => principe(3, lt, t) },
+            { d: 7, step: 4, cap: 'Seuls les clients avec un ticket valide naviguent.', draw: (lt, t) => principe(4, lt, t) }
+        ]
+    },
+    connexion: {
+        num: 2, title: 'Se connecter avec un ticket', subtitle: 'Le parcours du client, étape par étape', next: 'L\'installation d\'une Wi-Fi zone',
+        scenes: [
+            { d: 6, step: 1, cap: 'Le client achète un ticket avec un code secret.', draw: (lt, t, d) => connexion(1, lt, t, d) },
+            { d: 6, step: 2, cap: 'Il active le Wi-Fi et choisit le réseau de la zone.', draw: (lt, t, d) => connexion(2, lt, t, d) },
+            { d: 6.5, step: 3, cap: 'Une page s\'ouvre : il saisit le code du ticket.', draw: (lt, t, d) => connexion(3, lt, t, d) },
+            { d: 6, step: 4, cap: 'C\'est connecté ! Le temps restant s\'affiche.', draw: (lt, t, d) => connexion(4, lt, t, d) },
+            { d: 5, step: 5, cap: 'À la fin du forfait, l\'accès se coupe tout seul.', draw: (lt, t, d) => connexion(5, lt, t, d) }
+        ]
+    },
+    installation: {
+        num: 3, title: 'L\'installation, étape par étape', subtitle: 'Ce que je fais chez vous, du début à la fin', next: 'Gérer sa Wi-Fi zone au quotidien',
+        scenes: [
+            { d: 6, step: 1, cap: 'Étude du site : zone à couvrir, hauteur, obstacles.', draw: (lt, t, d) => installation(1, lt, t, d) },
+            { d: 6, step: 2, cap: 'Pose des antennes en hauteur, bien orientées.', draw: (lt, t, d) => installation(2, lt, t, d) },
+            { d: 6.5, step: 3, cap: 'Configuration du routeur, des forfaits et de la sécurité.', draw: (lt, t, d) => installation(3, lt, t, d) },
+            { d: 5.5, step: 4, cap: 'Tests du signal et du débit sur le terrain.', draw: (lt, t, d) => installation(4, lt, t, d) },
+            { d: 6, step: 5, cap: 'Formation du gérant à la création des tickets.', draw: (lt, t, d) => installation(5, lt, t, d) }
+        ]
+    },
+    gestion: {
+        num: 4, title: 'Gérer sa Wi-Fi zone au quotidien', subtitle: 'Tickets, clients connectés et suivi des ventes', next: null,
+        scenes: [
+            { d: 6, step: 1, cap: 'Le gérant crée des lots de tickets en quelques clics.', draw: (lt, t, d) => gestion(1, lt, t, d) },
+            { d: 6, step: 2, cap: 'Il voit en temps réel les clients connectés.', draw: (lt, t, d) => gestion(2, lt, t, d) },
+            { d: 6, step: 3, cap: 'Il suit les ventes de tickets jour après jour.', draw: (lt, t, d) => gestion(3, lt, t, d) },
+            { d: 5.5, step: 4, cap: 'Et je reste disponible pour la maintenance.', draw: (lt, t, d) => gestion(4, lt, t, d) }
+        ]
+    }
+};
+const TITLE_D = 3.2, END_D = 4.5;
+function duration(v) { return TITLE_D + v.scenes.reduce((s, sc) => s + sc.d, 0) + END_D; }
+
+function renderFrame(id, t) {
+    const v = VIDEOS[id];
+    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1;
+    if (t < TITLE_D) { titleCard(v, t, TITLE_D); return; }
+    let acc = TITLE_D;
+    for (const sc of v.scenes) {
+        if (t < acc + sc.d) {
+            const lt = t - acc;
+            background(); header(v);
+            sc.draw(lt, t, sc.d);
+            caption(sc.step, sc.cap, lt);
+            return;
+        }
+        acc += sc.d;
+    }
+    endCard(v, t - acc);
+}
+window.VIDEOS = VIDEOS; window.duration = duration; window.renderFrame = renderFrame;
+
+// Aperçu en direct quand la page est ouverte dans un navigateur
+if (!navigator.webdriver) {
+    let id = new URLSearchParams(location.search).get('v') || 'principe', start = performance.now(), paused = false, pt = 0;
+    const bar = document.getElementById('bar');
+    Object.keys(VIDEOS).forEach(k => { const b = document.createElement('button'); b.textContent = k; b.onclick = () => { id = k; start = performance.now(); }; bar.appendChild(b); });
+    addEventListener('keydown', e => { if (e.code === 'Space') { paused = !paused; if (!paused) start = performance.now() - pt * 1000; } });
+    document.fonts.ready.then(function loop() {
+        if (!paused) pt = ((performance.now() - start) / 1000) % duration(VIDEOS[id]);
+        renderFrame(id, pt);
+        requestAnimationFrame(loop);
+    });
+}
+</script>
+</body>
+</html>
