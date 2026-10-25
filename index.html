@@ -3,266 +3,367 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DAOUNA Gontran - Portfolio Professionnel</title>
+    <title>DAOUNA Gontran — Analyste de données, Développeur web, Coordinateur HSE</title>
+    <meta name="description" content="Portfolio de DAOUNA Gontran, basé à N'Djamena : analyse de données, développement web et coordination HSE.">
+    <meta property="og:title" content="DAOUNA Gontran — Portfolio professionnel">
+    <meta property="og:description" content="Analyse de données, développement web et coordination HSE à N'Djamena, Tchad.">
+    <meta property="og:image" content="photo-profile.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <nav class="container">
-            <div class="logo">DAOUNA Gontran</div>
-            <ul class="nav-links">
-                <li><a href="#accueil">Accueil</a></li>
+    <!-- Icônes -->
+    <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+        <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></symbol>
+        <symbol id="i-code" viewBox="0 0 24 24"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></symbol>
+        <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></symbol>
+        <symbol id="i-wrench" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></symbol>
+        <symbol id="i-sigma" viewBox="0 0 24 24"><path d="M18 7V4H6l6 8-6 8h12v-3"/></symbol>
+        <symbol id="i-terminal" viewBox="0 0 24 24"><path d="m4 17 6-6-6-6"/><path d="M12 19h8"/></symbol>
+        <symbol id="i-mail" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></symbol>
+        <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
+        <symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></symbol>
+        <symbol id="i-linkedin" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></symbol>
+        <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></symbol>
+        <symbol id="i-award" viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="M15.48 12.89 17 22l-5-3-5 3 1.52-9.11"/></symbol>
+        <symbol id="i-cap" viewBox="0 0 24 24"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></symbol>
+        <symbol id="i-mobile" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></symbol>
+        <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></symbol>
+        <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V2H6.5A2.5 2.5 0 0 0 4 4.5v15z"/><path d="M20 17v5H6.5a2.5 2.5 0 0 1 0-5"/></symbol>
+        <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+        <symbol id="i-external" viewBox="0 0 24 24"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></symbol>
+        <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+        <symbol id="i-send" viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></symbol>
+    </svg>
+
+    <header class="site-header" id="header">
+        <nav class="container nav">
+            <a href="#accueil" class="logo"><span class="logo-mark">DG</span><span>DAOUNA Gontran</span></a>
+            <button class="nav-toggle" id="nav-toggle" aria-label="Ouvrir le menu" aria-expanded="false"><span></span><span></span><span></span></button>
+            <ul class="nav-links" id="nav-links">
                 <li><a href="#about">À propos</a></li>
-                <li><a href="#skills">Compétences</a></li>
-                <li><a href="#certifications">Certifications</a></li>
-                <li><a href="#projects">Projets</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="#skills">Expertise</a></li>
+                <li><a href="#projects">Réalisations</a></li>
+                <li><a href="#certifications">Formations</a></li>
+                <li><a href="#contact" class="btn btn-small">Me contacter</a></li>
             </ul>
         </nav>
     </header>
 
     <section id="accueil" class="hero">
-        <div class="floating-shapes">
-            <div class="shape"></div>
-            <div class="shape"></div>
-            <div class="shape"></div>
-        </div>
-        <div class="hero-content">
-            <h1>DAOUNA Gontran</h1>
-            <p>Technicien en Mathématiques-Informatique | Analyste de données | Coordinateur HSE</p>
-            <a href="#projects" class="btn">Découvrir mes réalisations</a>
-        </div>
-    </section>
-
-    <section id="about" class="about">
-        <div class="container">
-            <h2 class="section-title">À propos de moi</h2>
-            <div class="about-content">
-                <div class="about-image">
-                    <img src="photo-profile.jpg" alt="DAOUNA Gontran" />
+        <div class="container hero-grid">
+            <div class="hero-text">
+                <span class="eyebrow"><svg class="icon"><use href="#i-pin"/></svg> N'Djamena, Tchad</span>
+                <h1>Des données fiables, des outils web utiles et des chantiers sûrs.</h1>
+                <p class="lead">Je suis <strong>DAOUNA Gontran</strong>, diplômé en Mathématiques-Informatique. J'aide les organisations à exploiter leurs données, à digitaliser leurs processus et à sécuriser leurs opérations sur le terrain.</p>
+                <div class="hero-actions">
+                    <a href="#projects" class="btn">Voir mes réalisations <svg class="icon"><use href="#i-arrow"/></svg></a>
+                    <a href="#contact" class="btn btn-outline">Discutons de votre projet</a>
                 </div>
-                <div class="about-text">
-                    <p>Diplômé en Mathématiques-Informatique de l'Université Polytechnique de Mongo, je suis un professionnel polyvalent spécialisé dans l'analyse de données, le développement web et la coordination HSE. Avec une solide formation technique et une expérience terrain variée, j'accompagne les organisations dans leurs projets de digitalisation et d'optimisation.</p>
-                    <p>Mes compétences couvrent l'analyse statistique avec Python (pandas, NumPy), le développement web avec Django, et la gestion de projets HSE. J'ai notamment coordonné la sécurité sur le projet de rebranding Total-Star Oil au Tchad et collecté des données pour le Programme Alimentaire Mondial.</p>
-                    <p>Passionné par l'innovation technologique et l'apprentissage continu, je maîtrise les outils modernes d'analyse (SPSS, Excel avancé) et suis toujours prêt à relever de nouveaux défis techniques.</p>
-                    <div style="margin-top: 2rem;">
-                        <p><strong>📧</strong> daounagontran@gmail.com</p>
-                        <p><strong>📱</strong> +235 60335886 / 97106315</p>
-                        <p><strong>🌍</strong> N'Djamena, Tchad</p>
-                    </div>
+                <ul class="hero-roles">
+                    <li><svg class="icon"><use href="#i-chart"/></svg> Analyste de données</li>
+                    <li><svg class="icon"><use href="#i-code"/></svg> Développeur web</li>
+                    <li><svg class="icon"><use href="#i-shield"/></svg> Coordinateur HSE</li>
+                </ul>
+            </div>
+            <div class="hero-photo">
+                <div class="photo-frame">
+                    <img src="photo-profile.jpg" alt="Portrait de DAOUNA Gontran" width="800" height="1200">
+                </div>
+                <div class="photo-badge">
+                    <svg class="icon"><use href="#i-cap"/></svg>
+                    <div><strong>Licence Maths-Info</strong><span>Université Polytechnique de Mongo</span></div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="skills" class="skills">
+    <section class="trust">
         <div class="container">
-            <h2 class="section-title">Mes Compétences</h2>
+            <p>Expériences auprès de</p>
+            <ul>
+                <li>Programme Alimentaire Mondial</li>
+                <li>Total / Star Oil Tchad</li>
+                <li>Entreprise Akouna</li>
+                <li>Université Polytechnique de Mongo</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="about" class="section">
+        <div class="container about-grid">
+            <div class="about-media">
+                <div class="media-card">
+                    <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=900&q=75" alt="Équipe travaillant sur des ordinateurs" loading="lazy" onerror="this.remove()">
+                </div>
+                <div class="about-facts">
+                    <div><strong>3</strong><span>domaines d'expertise</span></div>
+                    <div><strong>5</strong><span>certifications et formations</span></div>
+                </div>
+            </div>
+            <div class="about-text">
+                <span class="section-kicker">À propos</span>
+                <h2 class="section-title">Un profil polyvalent, entre technique et terrain</h2>
+                <p>Diplômé en Mathématiques-Informatique de l'Université Polytechnique de Mongo, je suis un professionnel polyvalent spécialisé dans l'analyse de données, le développement web et la coordination HSE. Avec une solide formation technique et une expérience terrain variée, j'accompagne les organisations dans leurs projets de digitalisation et d'optimisation.</p>
+                <p>J'ai notamment coordonné la sécurité sur le projet de rebranding Total/Star Oil au Tchad et collecté des données pour le Programme Alimentaire Mondial. Je maîtrise Python (pandas, NumPy), Django, SPSS et Excel avancé, et je reste toujours prêt à relever de nouveaux défis techniques.</p>
+                <ul class="contact-list">
+                    <li><svg class="icon"><use href="#i-mail"/></svg><a href="mailto:daounagontran@gmail.com">daounagontran@gmail.com</a></li>
+                    <li><svg class="icon"><use href="#i-phone"/></svg><a href="tel:+23560335886">+235 60 33 58 86</a> / <a href="tel:+23597106315">97 10 63 15</a></li>
+                    <li><svg class="icon"><use href="#i-pin"/></svg>N'Djamena, Tchad</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills" class="section section-alt">
+        <div class="container">
+            <div class="section-head">
+                <span class="section-kicker">Expertise</span>
+                <h2 class="section-title">Ce que je peux faire pour vous</h2>
+                <p>Des compétences complémentaires pour mener un projet de la collecte des données jusqu'à l'outil final.</p>
+            </div>
             <div class="skills-grid">
-                <div class="skill-card">
-                    <div class="skill-icon">📊</div>
-                    <h3>Analyse de Données</h3>
-                    <p>Maîtrise de SPSS, Excel avancé, Python avec pandas et NumPy pour l'analyse statistique et le traitement de données complexes.</p>
-                </div>
-                <div class="skill-card">
-                    <div class="skill-icon">💻</div>
-                    <h3>Développement Web</h3>
-                    <p>Création d'applications web avec Django, HTML/CSS et intégration de solutions techniques personnalisées.</p>
-                </div>
-                <div class="skill-card">
-                    <div class="skill-icon">🛡️</div>
+                <article class="skill-card">
+                    <div class="skill-icon"><svg class="icon"><use href="#i-chart"/></svg></div>
+                    <h3>Analyse de données</h3>
+                    <p>SPSS, Excel avancé, Python (pandas, NumPy) pour l'analyse statistique et le traitement de données complexes.</p>
+                </article>
+                <article class="skill-card">
+                    <div class="skill-icon"><svg class="icon"><use href="#i-code"/></svg></div>
+                    <h3>Développement web</h3>
+                    <p>Applications web avec Django, HTML, CSS et JavaScript, adaptées aux besoins réels des utilisateurs.</p>
+                </article>
+                <article class="skill-card">
+                    <div class="skill-icon"><svg class="icon"><use href="#i-shield"/></svg></div>
                     <h3>Coordination HSE</h3>
-                    <p>Gestion de la sécurité sur chantiers, conformité environnementale et supervision d'équipes techniques.</p>
-                </div>
-                <div class="skill-card">
-                    <div class="skill-icon">🔧</div>
+                    <p>Sécurité sur les chantiers, conformité environnementale et supervision d'équipes techniques.</p>
+                </article>
+                <article class="skill-card">
+                    <div class="skill-icon"><svg class="icon"><use href="#i-wrench"/></svg></div>
                     <h3>Maintenance IT</h3>
                     <p>Installation et maintenance de réseaux WiFi, support technique et gestion de systèmes informatiques.</p>
-                </div>
-                <div class="skill-card">
-                    <div class="skill-icon">📈</div>
-                    <h3>Mathématiques & Stats</h3>
+                </article>
+                <article class="skill-card">
+                    <div class="skill-icon"><svg class="icon"><use href="#i-sigma"/></svg></div>
+                    <h3>Mathématiques et statistiques</h3>
                     <p>Algèbre linéaire, calcul différentiel, probabilités et statistiques appliquées aux projets data.</p>
-                </div>
-                <div class="skill-card">
-                    <div class="skill-icon">🐍</div>
+                </article>
+                <article class="skill-card">
+                    <div class="skill-icon"><svg class="icon"><use href="#i-terminal"/></svg></div>
                     <h3>Programmation</h3>
-                    <p>Python, C++, Java et développement d'outils d'automatisation pour l'analyse de données.</p>
-                </div>
+                    <p>Python, C++ et Java, et développement d'outils d'automatisation pour l'analyse de données.</p>
+                </article>
             </div>
         </div>
     </section>
 
-    <section id="certifications">
+    <section id="projects" class="section">
         <div class="container">
-            <h2 class="section-title">Certifications & Formations</h2>
-            <div class="skills-grid">
-                <div class="skill-card">
-                    <div class="skill-icon">📱</div>
-                    <h3>SCOPE Mobile App - PAM</h3>
-                    <p>Certification pour l'utilisation de l'application SCOPE mobile dédiée à l'enregistrement des bénéficiaires du Programme Alimentaire Mondial.</p>
-                    <div style="margin-top: 1rem; font-size: 0.9rem; color: #667eea; font-weight: 600;">2024 - Programme Alimentaire Mondial</div>
-                </div>
-                <div class="skill-card">
-                    <div class="skill-icon">🐍</div>
-                    <h3>Python pour la Data Science</h3>
-                    <p>Formation complète en programmation Python appliquée à la science des données, analyse statistique et manipulation de données.</p>
-                    <div style="margin-top: 1rem; font-size: 0.9rem; color: #667eea; font-weight: 600;">2024 - B2Dev Studio</div>
-                </div>
-                <div class="skill-card">
-                    <div class="skill-icon">🛡️</div>
-                    <h3>Formation HSE</h3>
-                    <p>Formation spécialisée en Hygiène, Sécurité et Environnement pour la coordination de projets industriels et de construction.</p>
-                    <div style="margin-top: 1rem; font-size: 0.9rem; color: #667eea; font-weight: 600;">2024 - Entreprise Akouna</div>
-                </div>
-                <div class="skill-card">
-                    <div class="skill-icon">🌐</div>
-                    <h3>Développement Web Django</h3>
-                    <p>Maîtrise du framework Django pour le développement d'applications web robustes et scalables avec Python.</p>
-                    <div style="margin-top: 1rem; font-size: 0.9rem; color: #667eea; font-weight: 600;">2024 - B2Dev Studio</div>
-                </div>
-                <div class="skill-card">
-                    <div class="skill-icon">🎓</div>
-                    <h3>Formation Continue - OpenClassrooms</h3>
-                    <p>Cours en ligne spécialisés : Excel avancé, Python programmation, et Introduction à l'Intelligence Artificielle.</p>
-                    <div style="margin-top: 1rem; font-size: 0.9rem; color: #667eea; font-weight: 600;">2024 - OpenClassrooms</div>
-                </div>
-                <div class="skill-card">
-                    <div class="skill-icon">🎯</div>
-                    <h3>Licence Mathématiques-Informatique</h3>
-                    <p>Diplôme universitaire en Mathématiques et Informatique avec spécialisation en analyse statistique et programmation.</p>
-                    <div style="margin-top: 1rem; font-size: 0.9rem; color: #667eea; font-weight: 600;">2020-2023 - Université Polytechnique de Mongo</div>
-                </div>
+            <div class="section-head">
+                <span class="section-kicker">Réalisations</span>
+                <h2 class="section-title">Projets et expériences</h2>
+                <p>Une sélection de missions menées sur le terrain et d'outils développés pour mes clients.</p>
             </div>
-        </div>
-    </section>
 
-    <section id="projects">
-        <div class="container">
-            <h2 class="section-title">Mes Réalisations</h2>
+            <article class="featured">
+                <div class="featured-media">
+                    <img src="images/app-saisie.jpg" alt="Capture d'écran de l'application : saisie des notes" loading="lazy">
+                </div>
+                <div class="featured-body">
+                    <span class="tag-featured">Projet phare · 2026</span>
+                    <h3>Application de gestion des notes et bulletins</h3>
+                    <p>Application web développée pour un établissement scolaire. Elle remplace les calculs à la main et les tableurs : les enseignants saisissent les notes, l'application calcule moyennes et rangs, puis imprime les bulletins.</p>
+                    <ul class="checks">
+                        <li><svg class="icon"><use href="#i-check"/></svg> Moyennes pondérées par coefficients, rangs et ex-aequo</li>
+                        <li><svg class="icon"><use href="#i-check"/></svg> Bulletins A4 prêts à imprimer ou en PDF</li>
+                        <li><svg class="icon"><use href="#i-check"/></svg> Fonctionne sans connexion internet</li>
+                    </ul>
+                    <div class="project-tech">
+                        <span class="tech-tag">JavaScript</span>
+                        <span class="tech-tag">HTML / CSS</span>
+                        <span class="tech-tag">Hors-ligne</span>
+                    </div>
+                    <a href="ecole-notes/" class="btn" target="_blank" rel="noopener">Voir l'application <svg class="icon"><use href="#i-external"/></svg></a>
+                </div>
+            </article>
+
             <div class="projects-grid">
-                <div class="project-card">
+                <article class="project-card">
                     <div class="project-image">
-                        Gestion des Notes et Bulletins
+                        <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=75" alt="Ouvrier en tenue de sécurité sur un chantier" loading="lazy" onerror="this.remove()">
+                        <span class="project-year">2024</span>
                     </div>
                     <div class="project-content">
-                        <h3 class="project-title">Application de Gestion des Notes et Bulletins</h3>
-                        <p class="project-description">Application web hors-ligne développée pour un établissement scolaire : saisie des notes par trimestre, calcul automatique des moyennes et des rangs avec coefficients, impression des bulletins et statistiques de classe.</p>
-                        <div class="project-tech">
-                            <span class="tech-tag">HTML</span>
-                            <span class="tech-tag">CSS</span>
-                            <span class="tech-tag">JavaScript</span>
-                            <span class="tech-tag">Hors-ligne</span>
-                        </div>
-                        <p style="margin-top: 1rem; font-size: 0.9rem; color: #666;"><strong>2026</strong> - Établissement scolaire</p>
-                        <a href="ecole-notes/" class="btn" target="_blank" rel="noopener" style="margin-top: 1rem; padding: 8px 20px; font-size: 0.9rem;">Voir l'application</a>
-                    </div>
-                </div>
-                <div class="project-card">
-                    <div class="project-image">
-                        Coordination HSE - Total Star Oil
-                    </div>
-                    <div class="project-content">
-                        <h3 class="project-title">Coordination HSE - Projet Total/Star Oil</h3>
-                        <p class="project-description">Coordination complète de la sécurité et de l'hygiène pour le rebranding de stations Total en Star Oil au Tchad. Supervision d'équipes et mise en œuvre de procédures de sécurité.</p>
+                        <span class="project-client">Entreprise de Construction Akouna</span>
+                        <h3 class="project-title">Coordination HSE — Projet Total/Star Oil</h3>
+                        <p class="project-description">Coordination de la sécurité et de l'hygiène pour le rebranding des stations Total en Star Oil au Tchad. Supervision d'équipes et mise en œuvre des procédures de sécurité.</p>
                         <div class="project-tech">
                             <span class="tech-tag">Gestion HSE</span>
                             <span class="tech-tag">Supervision</span>
-                            <span class="tech-tag">Sécurité</span>
                             <span class="tech-tag">Conformité</span>
                         </div>
-                        <p style="margin-top: 1rem; font-size: 0.9rem; color: #666;"><strong>2024</strong> - Entreprise de Construction Akouna</p>
                     </div>
-                </div>
-                <div class="project-card">
+                </article>
+                <article class="project-card">
                     <div class="project-image">
-                        Collecte de Données PAM
+                        <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=800&q=75" alt="Collecte de données sur smartphone" loading="lazy" onerror="this.remove()">
+                        <span class="project-year">2023</span>
                     </div>
                     <div class="project-content">
-                        <h3 class="project-title">Collecte de Données - Programme PAM</h3>
-                        <p class="project-description">Mission de collecte de données sur le terrain pour le Programme Alimentaire Mondial, gestion des bénéficiaires avec l'application SCOF mobile.</p>
+                        <span class="project-client">Programme Alimentaire Mondial</span>
+                        <h3 class="project-title">Collecte de données — Programme PAM</h3>
+                        <p class="project-description">Mission de collecte de données sur le terrain et gestion des bénéficiaires avec l'application mobile SCOPE.</p>
                         <div class="project-tech">
-                            <span class="tech-tag">SCOF Mobile</span>
+                            <span class="tech-tag">SCOPE Mobile</span>
                             <span class="tech-tag">Collecte terrain</span>
-                            <span class="tech-tag">Gestion données</span>
-                            <span class="tech-tag">PAM</span>
+                            <span class="tech-tag">Gestion de données</span>
                         </div>
-                        <p style="margin-top: 1rem; font-size: 0.9rem; color: #666;"><strong>2023</strong> - Programme Alimentaire Mondial</p>
                     </div>
-                </div>
-                <div class="project-card">
+                </article>
+                <article class="project-card">
                     <div class="project-image">
-                        Maintenance IT Universitaire
+                        <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=75" alt="Équipements réseau dans une salle serveur" loading="lazy" onerror="this.remove()">
+                        <span class="project-year">2021 – 2023</span>
                     </div>
                     <div class="project-content">
-                        <h3 class="project-title">Technicien IT - Université Polytechnique</h3>
-                        <p class="project-description">Maintenance logicielle et installation de systèmes de gestion pour institutions locales. Support technique et formation utilisateurs.</p>
+                        <span class="project-client">Université Polytechnique de Mongo</span>
+                        <h3 class="project-title">Technicien IT universitaire</h3>
+                        <p class="project-description">Maintenance logicielle et installation de systèmes de gestion pour des institutions locales. Support technique et formation des utilisateurs.</p>
                         <div class="project-tech">
-                            <span class="tech-tag">Maintenance</span>
                             <span class="tech-tag">Réseaux WiFi</span>
                             <span class="tech-tag">Support IT</span>
                             <span class="tech-tag">Formation</span>
                         </div>
-                        <p style="margin-top: 1rem; font-size: 0.9rem; color: #666;"><strong>2021-2023</strong> - Université Polytechnique de Mongo</p>
                     </div>
-                </div>
-                <div class="project-card">
+                </article>
+                <article class="project-card">
                     <div class="project-image">
-                        Projets Analyse de Données
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=75" alt="Tableau de bord d'analyse de données" loading="lazy" onerror="this.remove()">
+                        <span class="project-year">En cours</span>
                     </div>
                     <div class="project-content">
-                        <h3 class="project-title">Projets d'Analyse Statistique</h3>
-                        <p class="project-description">Développement d'outils d'analyse avec Python, traitement de datasets complexes et création de rapports statistiques pour différents secteurs.</p>
+                        <span class="project-client">Projets personnels et académiques</span>
+                        <h3 class="project-title">Projets d'analyse statistique</h3>
+                        <p class="project-description">Développement d'outils d'analyse en Python, traitement de jeux de données complexes et rapports statistiques pour différents secteurs.</p>
                         <div class="project-tech">
                             <span class="tech-tag">Python</span>
                             <span class="tech-tag">Pandas</span>
-                            <span class="tech-tag">NumPy</span>
                             <span class="tech-tag">SPSS</span>
                         </div>
-                        <p style="margin-top: 1rem; font-size: 0.9rem; color: #666;"><strong>En cours</strong> - Projets personnels et académiques</p>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section id="certifications" class="section section-alt">
+        <div class="container">
+            <div class="section-head">
+                <span class="section-kicker">Formations</span>
+                <h2 class="section-title">Diplôme et certifications</h2>
+            </div>
+            <div class="cert-grid">
+                <div class="cert">
+                    <div class="cert-icon"><svg class="icon"><use href="#i-cap"/></svg></div>
+                    <div>
+                        <span class="cert-meta">2020 – 2023 · Université Polytechnique de Mongo</span>
+                        <h3>Licence Mathématiques-Informatique</h3>
+                        <p>Diplôme universitaire avec spécialisation en analyse statistique et programmation.</p>
+                    </div>
+                </div>
+                <div class="cert">
+                    <div class="cert-icon"><svg class="icon"><use href="#i-mobile"/></svg></div>
+                    <div>
+                        <span class="cert-meta">2024 · Programme Alimentaire Mondial</span>
+                        <h3>SCOPE Mobile App</h3>
+                        <p>Certification à l'application SCOPE mobile pour l'enregistrement des bénéficiaires du PAM.</p>
+                    </div>
+                </div>
+                <div class="cert">
+                    <div class="cert-icon"><svg class="icon"><use href="#i-chart"/></svg></div>
+                    <div>
+                        <span class="cert-meta">2024 · B2Dev Studio</span>
+                        <h3>Python pour la Data Science</h3>
+                        <p>Programmation Python appliquée à la science des données et à l'analyse statistique.</p>
+                    </div>
+                </div>
+                <div class="cert">
+                    <div class="cert-icon"><svg class="icon"><use href="#i-globe"/></svg></div>
+                    <div>
+                        <span class="cert-meta">2024 · B2Dev Studio</span>
+                        <h3>Développement web avec Django</h3>
+                        <p>Développement d'applications web robustes et évolutives avec Python et Django.</p>
+                    </div>
+                </div>
+                <div class="cert">
+                    <div class="cert-icon"><svg class="icon"><use href="#i-shield"/></svg></div>
+                    <div>
+                        <span class="cert-meta">2024 · Entreprise Akouna</span>
+                        <h3>Formation HSE</h3>
+                        <p>Hygiène, Sécurité et Environnement pour la coordination de projets industriels et de construction.</p>
+                    </div>
+                </div>
+                <div class="cert">
+                    <div class="cert-icon"><svg class="icon"><use href="#i-book"/></svg></div>
+                    <div>
+                        <span class="cert-meta">2024 · OpenClassrooms</span>
+                        <h3>Formation continue</h3>
+                        <p>Excel avancé, programmation Python et introduction à l'intelligence artificielle.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="contact" class="contact">
-        <div class="container">
-            <div class="contact-content">
-                <h2 class="section-title" style="color: white;">Contactez-moi</h2>
-                <p>Vous avez un projet en tête ? Discutons de la façon dont nous pouvons le concrétiser ensemble.</p>
-                <form class="contact-form">
+    <section id="contact" class="section contact">
+        <div class="container contact-grid">
+            <div class="contact-info">
+                <span class="section-kicker">Contact</span>
+                <h2 class="section-title">Vous avez un projet ?</h2>
+                <p>Application sur mesure, analyse de données ou mission HSE : parlons de votre besoin. Je réponds rapidement par e-mail, téléphone ou WhatsApp.</p>
+                <ul class="contact-list">
+                    <li><svg class="icon"><use href="#i-mail"/></svg><a href="mailto:daounagontran@gmail.com">daounagontran@gmail.com</a></li>
+                    <li><svg class="icon"><use href="#i-phone"/></svg><a href="tel:+23560335886">+235 60 33 58 86</a></li>
+                    <li><svg class="icon"><use href="#i-chat"/></svg><a href="https://wa.me/23560335886" target="_blank" rel="noopener">Écrire sur WhatsApp</a></li>
+                    <li><svg class="icon"><use href="#i-pin"/></svg>N'Djamena, Tchad</li>
+                </ul>
+            </div>
+            <form class="contact-form">
+                <div class="form-row">
                     <div class="form-group">
                         <label for="name">Nom</label>
                         <input type="text" id="name" name="name" placeholder="Votre nom" required>
                     </div>
                     <div class="form-group">
-                        <label for="email">Email</label>
+                        <label for="email">E-mail</label>
                         <input type="email" id="email" name="email" placeholder="votre.email@exemple.com" required>
                     </div>
-                    <div class="form-group">
-                        <label for="subject">Sujet</label>
-                        <input type="text" id="subject" name="subject" placeholder="Sujet de votre message" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="message">Message</label>
-                        <textarea id="message" name="message" rows="5" placeholder="Décrivez votre projet..." required></textarea>
-                    </div>
-                    <button type="submit" class="btn">Envoyer le message</button>
-                </form>
-            </div>
+                </div>
+                <div class="form-group">
+                    <label for="subject">Sujet</label>
+                    <input type="text" id="subject" name="subject" placeholder="Sujet de votre message" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" rows="5" placeholder="Décrivez votre projet…" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-block">Envoyer le message <svg class="icon"><use href="#i-send"/></svg></button>
+            </form>
         </div>
     </section>
 
-    <footer>
-        <div class="container">
+    <footer class="footer">
+        <div class="container footer-inner">
+            <a href="#accueil" class="logo"><span class="logo-mark">DG</span><span>DAOUNA Gontran</span></a>
             <div class="social-links">
-                <a href="mailto:daounagontran@gmail.com" title="Email">📧</a>
-                <a href="https://www.linkedin.com/in/daouna-gontran-2043b72b0" title="LinkedIn" target="_blank">💼</a>
-                <a href="https://wa.me/23560335886" title="WhatsApp" target="_blank">💬</a>
-                <a href="tel:+23560335886" title="Téléphone">📱</a>
+                <a href="mailto:daounagontran@gmail.com" title="E-mail" aria-label="E-mail"><svg class="icon"><use href="#i-mail"/></svg></a>
+                <a href="https://www.linkedin.com/in/daouna-gontran-2043b72b0" title="LinkedIn" aria-label="LinkedIn" target="_blank" rel="noopener"><svg class="icon"><use href="#i-linkedin"/></svg></a>
+                <a href="https://wa.me/23560335886" title="WhatsApp" aria-label="WhatsApp" target="_blank" rel="noopener"><svg class="icon"><use href="#i-chat"/></svg></a>
+                <a href="tel:+23560335886" title="Téléphone" aria-label="Téléphone"><svg class="icon"><use href="#i-phone"/></svg></a>
             </div>
-            <p>&copy; 2025 DAOUNA Gontran. Tous droits réservés.</p>
+            <p>&copy; <span id="year">2026</span> DAOUNA Gontran. Tous droits réservés. · Photos d'illustration : Unsplash</p>
         </div>
     </footer>
 
