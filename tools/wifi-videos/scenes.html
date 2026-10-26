@@ -631,14 +631,16 @@ const VIDEOS = {
         ]
     }
 };
+// Durées par défaut des cartes titre et contact ; render.js peut les allonger (titleD / endD) pour la voix off
 const TITLE_D = 3.2, END_D = 4.5;
-function duration(v) { return TITLE_D + v.scenes.reduce((s, sc) => s + sc.d, 0) + END_D; }
+const titleD = v => v.titleD || TITLE_D, endD = v => v.endD || END_D;
+function duration(v) { return titleD(v) + v.scenes.reduce((s, sc) => s + sc.d, 0) + endD(v); }
 
 function renderFrame(id, t) {
     const v = VIDEOS[id];
     ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1;
-    if (t < TITLE_D) { titleCard(v, t, TITLE_D); return; }
-    let acc = TITLE_D;
+    if (t < titleD(v)) { titleCard(v, t, titleD(v)); return; }
+    let acc = titleD(v);
     for (const sc of v.scenes) {
         if (t < acc + sc.d) {
             const lt = t - acc;
