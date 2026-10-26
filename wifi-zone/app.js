@@ -6,7 +6,7 @@ const VIDEOS = [
         title: 'Comment fonctionne une Wi-Fi zone ?',
         file: 'videos/principe.mp4',
         poster: 'videos/principe.jpg',
-        duration: '0:33',
+        duration: '0:42',
         desc: 'Le trajet de la connexion, de la source internet jusqu\'au téléphone du client.',
         steps: [
             'Une connexion internet (fibre, 4G ou satellite) arrive sur le site.',
@@ -20,7 +20,7 @@ const VIDEOS = [
         title: 'Se connecter avec un ticket',
         file: 'videos/connexion.mp4',
         poster: 'videos/connexion.jpg',
-        duration: '0:37',
+        duration: '0:50',
         desc: 'Ce que fait le client, du ticket acheté jusqu\'à la fin de son forfait.',
         steps: [
             'Le client achète un ticket (1 heure, 1 jour, 1 semaine…) qui porte un code.',
@@ -35,7 +35,7 @@ const VIDEOS = [
         title: 'L\'installation, étape par étape',
         file: 'videos/installation.mp4',
         poster: 'videos/installation.jpg',
-        duration: '0:38',
+        duration: '0:50',
         desc: 'Ce que je fais chez vous pour mettre en service une Wi-Fi zone.',
         steps: [
             'Étude du site : zone à couvrir, hauteur disponible, obstacles.',
@@ -50,7 +50,7 @@ const VIDEOS = [
         title: 'Gérer sa Wi-Fi zone au quotidien',
         file: 'videos/gestion.mp4',
         poster: 'videos/gestion.jpg',
-        duration: '0:31',
+        duration: '0:38',
         desc: 'Les gestes du gérant une fois la Wi-Fi zone en service.',
         steps: [
             'Créer des lots de tickets en quelques clics.',

@@ -1,0 +1,45 @@
+{
+    "_note": "Texte de la voix off. Une entrée par vidéo : intro (carte titre), une phrase par scène, puis fin (carte contact). Les nombres sont écrits en lettres pour une bonne prononciation.",
+    "principe": {
+        "intro": "Une Wi-Fi zone, comment ça marche ? Je vous explique le principe.",
+        "scenes": [
+            "Tout commence par une connexion internet : la fibre, une box quatre G, ou le satellite.",
+            "Cette connexion est branchée sur un routeur hotspot. C'est lui qui vérifie les tickets, et qui partage le débit entre les clients.",
+            "Ensuite, des antennes placées en hauteur diffusent le signal Wi-Fi dans tout le quartier.",
+            "Les clients qui ont un ticket valide peuvent naviguer. Sans ticket, l'accès reste bloqué."
+        ],
+        "outro": "Pour installer votre Wi-Fi zone, contactez Daouna Gontran, au soixante, trente-trois, cinquante-huit, quatre-vingt-six."
+    },
+    "connexion": {
+        "intro": "Voyons maintenant comment un client se connecte avec un ticket.",
+        "scenes": [
+            "D'abord, le client achète un ticket : pour une heure, une journée, ou une semaine. Sur le ticket, il y a un code secret.",
+            "Ensuite, il active le Wi-Fi de son téléphone, et il choisit le réseau de la zone.",
+            "Une page de connexion s'ouvre automatiquement. Il tape le code de son ticket, puis il appuie sur : se connecter.",
+            "Et voilà, il est connecté ! Il peut naviguer, envoyer des messages, regarder des vidéos. Le temps restant s'affiche à l'écran.",
+            "Quand le forfait est terminé, l'accès se coupe tout seul. Pour continuer, il suffit d'acheter un nouveau ticket."
+        ],
+        "outro": "Pour installer votre Wi-Fi zone, contactez Daouna Gontran, au soixante, trente-trois, cinquante-huit, quatre-vingt-six."
+    },
+    "installation": {
+        "intro": "Comment se passe l'installation d'une Wi-Fi zone ? Je vous montre les étapes.",
+        "scenes": [
+            "Je commence par étudier le site : la zone à couvrir, la hauteur disponible, et les obstacles, comme les arbres ou les bâtiments.",
+            "Ensuite, je pose les antennes en hauteur, et je les oriente vers les clients.",
+            "Je configure le routeur : le nom du réseau, la page de connexion, les forfaits, la limite de débit, et la sécurité.",
+            "Puis je teste le signal et le débit sur le terrain, pour être sûr que tout fonctionne bien.",
+            "Enfin, je forme le gérant, pour qu'il sache créer et vendre les tickets tout seul."
+        ],
+        "outro": "Pour installer votre Wi-Fi zone, contactez Daouna Gontran, au soixante, trente-trois, cinquante-huit, quatre-vingt-six."
+    },
+    "gestion": {
+        "intro": "Une fois la Wi-Fi zone installée, comment la gérer au quotidien ?",
+        "scenes": [
+            "Le gérant crée des lots de tickets en quelques clics : pour une heure, un jour, ou une semaine.",
+            "Il voit en temps réel les clients connectés, et le temps qu'il leur reste.",
+            "Il suit aussi les ventes de tickets, jour après jour.",
+            "Et en cas de problème, je reste disponible pour la maintenance et le dépannage."
+        ],
+        "outro": "Pour installer votre Wi-Fi zone, contactez Daouna Gontran, au soixante, trente-trois, cinquante-huit, quatre-vingt-six."
+    }
+}
