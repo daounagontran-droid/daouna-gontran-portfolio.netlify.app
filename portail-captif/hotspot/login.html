@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="expires" content="-1">
+<meta name="theme-color" content="#0b1f3a">
+<title>DAOUNA Wi-Fi · Connexion</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!--
+  PERSONNALISATION RAPIDE
+  - Nom du réseau : cherchez "DAOUNA-WIFI"
+  - Tarifs : section "Nos forfaits"
+  - Contacts : section "Besoin d'un ticket ?"
+  - Couleurs : variables en haut de style.css
+-->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-wifi" viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><path d="M12 20h.01"/></symbol>
+  <symbol id="i-ticket" viewBox="0 0 24 24"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.18 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.1 9.9a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 21l2.1-5.6A8.4 8.4 0 1 1 21 11.5Z"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></symbol>
+  <symbol id="i-tag" viewBox="0 0 24 24"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L2 12V2h10l8.6 8.6a2 2 0 0 1 0 2.8Z"/><path d="M7 7h.01"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11"/><path d="M9 12h11"/><path d="M9 18h11"/><path d="M4 6h.01"/><path d="M4 12h.01"/><path d="M4 18h.01"/></symbol>
+  <symbol id="i-gift" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5"/></symbol>
+</svg>
+
+$(if chap-id)
+<form name="sendin" action="$(link-login-only)" method="post" style="display:none">
+  <input type="hidden" name="username">
+  <input type="hidden" name="password">
+  <input type="hidden" name="dst" value="$(link-orig)">
+  <input type="hidden" name="popup" value="true">
+</form>
+<script src="md5.js"></script>
+<script>
+  var CHAP_ID = '$(chap-id)', CHAP_CHALLENGE = '$(chap-challenge)';
+</script>
+$(endif)
+
+<main class="layout">
+  <section class="hero">
+    <div class="hero-top">
+      <div class="brand">
+        <div class="brand-mark"><svg class="i"><use href="#i-wifi"/></svg></div>
+        <div>
+          <div class="brand-name">DAOUNA <b>Wi-Fi</b></div>
+          <div class="brand-sub">Internet rapide · N'Djamena</div>
+        </div>
+      </div>
+      <span class="ssid"><span class="live"></span>DAOUNA-WIFI</span>
+    </div>
+    <h1>Bienvenue sur le réseau.<br><em>Votre ticket, votre Internet.</em></h1>
+    <p class="lead">Saisissez le code de votre ticket pour naviguer immédiatement. Le temps est décompté automatiquement, sans engagement.</p>
+  </section>
+
+  <div class="ticket-wrap">
+    <div class="ticket">
+      <div class="ticket-head">
+        <h2>Se connecter</h2>
+        <p>Choisissez votre mode de connexion.</p>
+      </div>
+      <div class="perfo"></div>
+      <div class="ticket-body">
+        $(if error)<div class="alert" role="alert"><svg class="i"><use href="#i-alert"/></svg><span>$(error)</span></div>$(endif)
+
+        <div class="tabs" role="tablist">
+          <button type="button" role="tab" id="tab-code" aria-selected="true" aria-controls="pane-code"><svg class="i"><use href="#i-ticket"/></svg>Ticket</button>
+          <button type="button" role="tab" id="tab-compte" aria-selected="false" aria-controls="pane-compte"><svg class="i"><use href="#i-user"/></svg>Compte</button>
+        </div>
+
+        <form name="login" action="$(link-login-only)" method="post" autocomplete="off">
+          <input type="hidden" name="dst" value="$(link-orig)">
+          <input type="hidden" name="popup" value="true">
+          <input type="hidden" name="username">
+          <input type="hidden" name="password">
+
+          <div id="pane-code" role="tabpanel">
+            <div class="field">
+              <label for="code">Code du ticket</label>
+              <div class="input-wrap">
+                <svg class="i"><use href="#i-ticket"/></svg>
+                <input class="code" id="code" type="text" inputmode="text" autocapitalize="characters" spellcheck="false" placeholder="EX : 7K2P9Q" value="$(username)">
+              </div>
+              <p class="hint">Le code est imprimé sur votre ticket.</p>
+            </div>
+          </div>
+
+          <div id="pane-compte" role="tabpanel" hidden>
+            <div class="field">
+              <label for="user">Nom d'utilisateur</label>
+              <div class="input-wrap">
+                <svg class="i"><use href="#i-user"/></svg>
+                <input id="user" type="text" autocapitalize="off" spellcheck="false" placeholder="Votre identifiant" value="$(username)">
+              </div>
+            </div>
+            <div class="field">
+              <label for="pass">Mot de passe</label>
+              <div class="input-wrap">
+                <svg class="i"><use href="#i-lock"/></svg>
+                <input id="pass" type="password" placeholder="Votre mot de passe">
+                <button type="button" class="toggle-pass" id="togglePass" aria-label="Afficher le mot de passe"><svg class="i"><use href="#i-eye"/></svg></button>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn btn-primary" type="submit" id="submitBtn">Se connecter <svg class="i"><use href="#i-arrow"/></svg></button>
+        </form>
+
+        $(if trial == 'yes')
+        <a class="btn btn-ghost" href="$(link-login-only)?dst=$(link-orig-esc)&amp;username=T-$(mac-esc)"><svg class="i"><use href="#i-gift"/></svg>Essai gratuit</a>
+        $(endif)
+
+        <noscript><p class="hint" style="color:#8a2414">Activez JavaScript dans votre navigateur pour vous connecter.</p></noscript>
+        <p class="secure"><svg class="i"><use href="#i-shield"/></svg>Connexion protégée · Votre code reste privé</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="info info-grid">
+    <section class="panel" style="grid-column:1/-1">
+      <h3><svg class="i"><use href="#i-tag"/></svg>Nos forfaits</h3>
+      <div class="plans">
+        <div class="plan"><div class="dur">1 heure</div><div class="price">200 <small>FCFA</small></div><div class="name">Express</div></div>
+        <div class="plan best"><span class="tag">Populaire</span><div class="dur">24 heures</div><div class="price">500 <small>FCFA</small></div><div class="name">Journée</div></div>
+        <div class="plan"><div class="dur">7 jours</div><div class="price">2 500 <small>FCFA</small></div><div class="name">Semaine</div></div>
+        <div class="plan"><div class="dur">30 jours</div><div class="price">8 000 <small>FCFA</small></div><div class="name">Mois</div></div>
+      </div>
+      <p class="plans-note">Tickets en vente sur place et auprès de nos revendeurs.</p>
+    </section>
+
+    <section class="panel">
+      <h3><svg class="i"><use href="#i-list"/></svg>Comment ça marche</h3>
+      <ol class="steps">
+        <li><span>Achetez un ticket auprès d'un point de vente.</span></li>
+        <li><span>Saisissez le code du ticket ci-dessus.</span></li>
+        <li><span>Naviguez : le temps restant s'affiche sur la page de statut.</span></li>
+      </ol>
+    </section>
+
+    <section class="panel">
+      <h3><svg class="i"><use href="#i-phone"/></svg>Besoin d'un ticket ?</h3>
+      <div class="contact">
+        <a href="tel:+23560335886"><svg class="i"><use href="#i-phone"/></svg>+235 60 33 58 86</a>
+        <a href="https://wa.me/23560335886"><svg class="i"><use href="#i-chat"/></svg>WhatsApp</a>
+        <div><svg class="i"><use href="#i-pin"/></svg>N'Djamena, Tchad</div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer class="footer">© DAOUNA Wi-Fi · Réseau géré par DAOUNA Gontran</footer>
+
+<div class="loader" id="loader" role="status" aria-live="polite">
+  <div class="waves"><svg class="i" viewBox="0 0 24 24"><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><path d="M12 20h.01"/></svg></div>
+  <p>Connexion en cours</p>
+  <small>Vérification de votre ticket…</small>
+</div>
+
+<script>
+(function () {
+  var form = document.forms.login;
+  var tabs = { code: document.getElementById('tab-code'), compte: document.getElementById('tab-compte') };
+  var panes = { code: document.getElementById('pane-code'), compte: document.getElementById('pane-compte') };
+  var codeInput = document.getElementById('code');
+  var userInput = document.getElementById('user');
+  var passInput = document.getElementById('pass');
+  var mode = 'code';
+
+  function setMode(m) {
+    mode = m;
+    for (var k in tabs) {
+      tabs[k].setAttribute('aria-selected', k === m ? 'true' : 'false');
+      panes[k].hidden = k !== m;
+    }
+    try { localStorage.setItem('dw-mode', m); } catch (e) {}
+    (m === 'code' ? codeInput : userInput).focus();
+  }
+  tabs.code.onclick = function () { setMode('code'); };
+  tabs.compte.onclick = function () { setMode('compte'); };
+  try { if (localStorage.getItem('dw-mode') === 'compte') setMode('compte'); } catch (e) {}
+
+  codeInput.addEventListener('input', function () {
+    var p = codeInput.selectionStart;
+    codeInput.value = codeInput.value.toUpperCase().replace(/\s+/g, '');
+    try { codeInput.setSelectionRange(p, p); } catch (e) {}
+  });
+
+  document.getElementById('togglePass').onclick = function () {
+    var show = passInput.type === 'password';
+    passInput.type = show ? 'text' : 'password';
+    this.setAttribute('aria-label', show ? 'Masquer le mot de passe' : 'Afficher le mot de passe');
+  };
+
+  form.onsubmit = function () {
+    var u, p;
+    if (mode === 'code') {
+      u = p = codeInput.value.trim();
+      if (!u) { codeInput.focus(); return false; }
+    } else {
+      u = userInput.value.trim(); p = passInput.value;
+      if (!u) { userInput.focus(); return false; }
+    }
+    document.getElementById('submitBtn').disabled = true;
+    document.getElementById('loader').className = 'loader show';
+
+    setTimeout(function () {
+      if (typeof CHAP_ID !== 'undefined' && document.forms.sendin) {
+        var s = document.forms.sendin;
+        s.username.value = u;
+        s.password.value = hexMD5(CHAP_ID + p + CHAP_CHALLENGE);
+        s.submit();
+      } else {
+        form.username.value = u;
+        form.password.value = p;
+        form.submit();
+      }
+    }, 900);
+    return false;
+  };
+})();
+</script>
+</body>
+</html>

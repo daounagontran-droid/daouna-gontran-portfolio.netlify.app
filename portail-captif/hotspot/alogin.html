@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="expires" content="-1">
+<meta name="theme-color" content="#0b1f3a">
+<title>DAOUNA Wi-Fi · Connecté</title>
+<link rel="stylesheet" href="style.css">
+<script>
+  // Renvoie vers la page demandée au départ après 2,5 secondes.
+  function startRedirect() {
+    setTimeout(function () { location.href = unescape('$(link-redirect-esc)'); }, 2500);
+  }
+</script>
+</head>
+<body onload="startRedirect()">
+<main class="center">
+  <div class="box">
+    <div class="brand">
+      <div class="brand-mark"><svg class="i" viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><path d="M12 20h.01"/></svg></div>
+      <div><div class="brand-name">DAOUNA <b>Wi-Fi</b></div><div class="brand-sub">DAOUNA-WIFI</div></div>
+    </div>
+    <div class="ticket">
+      <div class="ticket-head">
+        <div class="badge-ico ok"><svg class="i" viewBox="0 0 24 24"><path d="M5 12.5 10 17.5 19.5 7"/></svg></div>
+        <h2>Vous êtes connecté</h2>
+        <p>$(if login-by != 'mac')Bonne navigation, $(username).$(else)Bonne navigation !$(endif)</p>
+      </div>
+      <div class="perfo"></div>
+      <div class="ticket-body">
+        <table class="rows">
+          $(if session-time-left)<tr><td>Temps restant</td><td>$(session-time-left)</td></tr>$(endif)
+          <tr><td>Adresse IP</td><td>$(ip)</td></tr>
+        </table>
+        <p class="hint" style="text-align:center">Redirection vers votre page…</p>
+        <div class="progress"><span></span></div>
+        <a class="btn btn-primary" href="$(link-redirect)">Continuer la navigation</a>
+        <a class="btn btn-ghost" href="$(link-status)">Voir mon temps restant</a>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>

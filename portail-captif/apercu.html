@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aperçu · Portail captif DAOUNA Wi-Fi</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #0b1f3a; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
+  iframe { border: 0; width: 100%; height: calc(100% - 44px); display: block; }
+  nav { height: 44px; display: flex; align-items: center; gap: 6px; padding: 0 10px; background: #e0a526; overflow-x: auto; white-space: nowrap; }
+  nav strong { font-size: 13px; color: #0b1f3a; margin-right: 6px; }
+  nav a { font-size: 13px; font-weight: 700; color: #0b1f3a; text-decoration: none; padding: 5px 10px; border-radius: 999px; }
+  nav a.on { background: #0b1f3a; color: #fff; }
+</style>
+</head>
+<body>
+<nav id="nav"><strong>Aperçu démo</strong></nav>
+<iframe id="frame" title="Aperçu du portail captif"></iframe>
+<script>
+/* Simule le moteur de modèles du hotspot MikroTik ($(variable), $(if ...)$(else)$(endif)). */
+(function () {
+  if (window.top !== window) { top.location.href = location.href; return; }
+  var here = location.href.split('?')[0];
+  var params = new URLSearchParams(location.search);
+  var page = params.get('page') || 'login';
+  var pages = { login: 'Connexion', 'login-erreur': 'Erreur de code', alogin: 'Connecté', status: 'Statut', logout: 'Déconnexion', error: 'Page d\'erreur' };
+  var go = function (p) { return here + '?page=' + p; };
+
+  var vars = {
+    'link-login-only': go('alogin'), 'link-login': go('login'), 'link-logout': go('logout'),
+    'link-status': go('status'), 'link-orig': go('status'), 'link-redirect': go('status'),
+    'link-orig-esc': encodeURIComponent(go('status')), 'link-redirect-esc': escape(go('status')),
+    'mac-esc': 'AA%3ABB%3ACC', 'username': page === 'login' ? '' : '7K2P9Q',
+    'ip': '10.5.50.23', 'mac': 'AA:BB:CC:12:34:56', 'uptime': '1h12m', 'session-time-left': '22h48m',
+    'bytes-in-nice': '18.4 MiB', 'bytes-out-nice': '312.7 MiB', 'login-by': 'http-chap', 'login-by-mac': 'no',
+    'trial': 'yes', 'chap-id': '', 'chap-challenge': '',
+    'error': page === 'login-erreur' ? 'Code ou identifiant incorrect, veuillez réessayer' :
+             page === 'error' ? 'Le serveur d\'authentification ne répond pas' : ''
+  };
+  var file = page === 'login-erreur' ? 'login' : page;
+  if (!pages[page]) { page = 'login'; file = 'login'; }
+
+  var nav = document.getElementById('nav');
+  Object.keys(pages).forEach(function (p) {
+    var a = document.createElement('a'); a.href = go(p); a.textContent = pages[p];
+    if (p === page) a.className = 'on'; nav.appendChild(a);
+  });
+
+  function test(cond) {
+    var m = cond.match(/^\s*([\w-]+)\s*(==|!=)?\s*(?:'([^']*)'|"([^"]*)")?\s*$/);
+    if (!m) return false;
+    var v = vars[m[1]] || '';
+    if (!m[2]) return v !== '';
+    var cmp = m[3] !== undefined ? m[3] : (m[4] || '');
+    return m[2] === '==' ? v === cmp : v !== cmp;
+  }
+  function render(src) {
+    var out = '', stack = [], re = /\$\(([^)]*)\)/g, last = 0, m;
+    var active = function () { return stack.every(function (f) { return f.on; }); };
+    while ((m = re.exec(src))) {
+      if (active()) out += src.slice(last, m.index);
+      last = re.lastIndex;
+      var t = m[1];
+      if (/^if\s/.test(t)) { var ok = test(t.slice(3)); stack.push({ on: ok, done: ok }); }
+      else if (/^elif\s/.test(t)) { var top = stack[stack.length - 1]; top.on = !top.done && test(t.slice(5)); top.done = top.done || top.on; }
+      else if (t === 'else') { var tp = stack[stack.length - 1]; tp.on = !tp.done; tp.done = true; }
+      else if (t === 'endif') stack.pop();
+      else if (active()) out += (vars[t] !== undefined ? vars[t] : '');
+    }
+    return out + src.slice(last);
+  }
+
+  var frame = document.getElementById('frame');
+  fetch('hotspot/' + file + '.html').then(function (r) { return r.text(); }).then(function (src) {
+    var html = render(src).replace('<head>', '<head><base href="' + new URL('hotspot/', here).href + '" target="_top">');
+    frame.onload = function () {
+      var w = frame.contentWindow;
+      // Les formulaires du hotspot font un POST : en démo, on suit simplement le lien.
+      w.HTMLFormElement.prototype.submit = function () { top.location.href = this.getAttribute('action'); };
+      w.document.addEventListener('submit', function (e) {
+        if (!e.defaultPrevented) { e.preventDefault(); top.location.href = e.target.getAttribute('action'); }
+      });
+    };
+    frame.srcdoc = html;
+  });
+})();
+</script>
+</body>
+</html>
