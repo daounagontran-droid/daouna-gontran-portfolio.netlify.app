@@ -1,0 +1,19 @@
+# Messages d'erreur du Hotspot MikroTik - Traduits en français
+# Variables disponibles : $(error-orig), $(ip), $(username)
+
+internal-error = Erreur interne ($(error-orig))
+config-error = Erreur de configuration ($(error-orig))
+not-logged-in = Vous n'êtes pas connecté (IP $(ip))
+ippool-empty = Aucune adresse IP disponible, réessayez plus tard
+shutting-down = Le service WiFi est en cours d'arrêt
+user-session-limit = Nombre maximum de sessions atteint pour $(username)
+license-session-limit = Limite de sessions atteinte ($(error-orig))
+wrong-mac-username = Identifiant invalide ($(username)) : cette adresse MAC ne vous appartient pas
+chap-missing = Votre navigateur n'a pas envoyé la réponse CHAP. Activez JavaScript et réessayez.
+invalid-username = Code ou identifiant incorrect, veuillez réessayer
+invalid-mac = L'utilisateur $(username) ne peut pas se connecter depuis cette adresse MAC
+uptime-limit = $(username) a atteint la limite de temps de connexion
+traffic-limit = $(username) a atteint la limite de données
+radius-timeout = Le serveur d'authentification ne répond pas
+auth-in-progress = Authentification en cours, réessayez dans un instant
+radius-reply = $(error-orig)
