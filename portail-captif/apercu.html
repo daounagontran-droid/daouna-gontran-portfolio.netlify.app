@@ -1,89 +1,108 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Aperçu · Portail captif DAOUNA Wi-Fi</title>
+<title>Portail DAOUNA Wi-Fi</title>
 <style>
-  html, body { margin: 0; height: 100%; background: #0b1f3a; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
-  iframe { border: 0; width: 100%; height: calc(100% - 44px); display: block; }
-  nav { height: 44px; display: flex; align-items: center; gap: 6px; padding: 0 10px; background: #e0a526; overflow-x: auto; white-space: nowrap; }
-  nav strong { font-size: 13px; color: #0b1f3a; margin-right: 6px; }
-  nav a { font-size: 13px; font-weight: 700; color: #0b1f3a; text-decoration: none; padding: 5px 10px; border-radius: 999px; }
-  nav a.on { background: #0b1f3a; color: #fff; }
+  /* Bandeau de navigation doré au-dessus d'un écran plein qui affiche la vraie page du hotspot. */
+  :root { --navy: #0b1f3a; --gold: #e0a526; --ink: #0b1f3a; --paper: #ffffff; color-scheme: dark; }
+  html, body { height: 100%; }
+  body { margin: 0; background: var(--navy); color: var(--paper); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; display: flex; flex-direction: column; }
+  nav { flex: none; display: flex; align-items: center; gap: 4px; padding-block: 8px; padding-left: max(12px, env(safe-area-inset-left, 0px)); padding-right: max(12px, env(safe-area-inset-right, 0px)); background: var(--gold); overflow-x: auto; white-space: nowrap; }
+  nav strong { font-size: 12px; text-transform: uppercase; letter-spacing: .1em; color: var(--ink); margin-right: 8px; }
+  nav button { font: inherit; font-size: 13px; font-weight: 700; color: var(--ink); background: transparent; border: 0; padding: 6px 12px; border-radius: 999px; cursor: pointer; }
+  nav button[aria-current="page"] { background: var(--ink); color: var(--paper); }
+  nav button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+  iframe { flex: 1; width: 100%; border: 0; display: block; background: var(--navy); }
 </style>
-</head>
-<body>
-<nav id="nav"><strong>Aperçu démo</strong></nav>
-<iframe id="frame" title="Aperçu du portail captif"></iframe>
+<nav id="nav" aria-label="Écrans du portail"><strong>Aperçu</strong></nav>
+<iframe id="frame" title="Portail captif DAOUNA Wi-Fi"></iframe>
 <script>
-/* Simule le moteur de modèles du hotspot MikroTik ($(variable), $(if ...)$(else)$(endif)). */
+/* Simule le moteur de modèles du hotspot MikroTik : $(variable), $(if ...)$(else)$(endif). */
 (function () {
-  if (window.top !== window) { top.location.href = location.href; return; }
-  var here = location.href.split('?')[0];
-  var params = new URLSearchParams(location.search);
-  var page = params.get('page') || 'login';
-  var pages = { login: 'Connexion', 'login-erreur': 'Erreur de code', alogin: 'Connecté', status: 'Statut', logout: 'Déconnexion', error: 'Page d\'erreur' };
-  var go = function (p) { return here + '?page=' + p; };
-
-  var vars = {
-    'link-login-only': go('alogin'), 'link-login': go('login'), 'link-logout': go('logout'),
-    'link-status': go('status'), 'link-orig': go('status'), 'link-redirect': go('status'),
-    'link-orig-esc': encodeURIComponent(go('status')), 'link-redirect-esc': escape(go('status')),
-    'mac-esc': 'AA%3ABB%3ACC', 'username': page === 'login' ? '' : '7K2P9Q',
-    'ip': '10.5.50.23', 'mac': 'AA:BB:CC:12:34:56', 'uptime': '1h12m', 'session-time-left': '22h48m',
-    'bytes-in-nice': '18.4 MiB', 'bytes-out-nice': '312.7 MiB', 'login-by': 'http-chap', 'login-by-mac': 'no',
-    'trial': 'yes', 'chap-id': '', 'chap-challenge': '',
-    'error': page === 'login-erreur' ? 'Code ou identifiant incorrect, veuillez réessayer' :
-             page === 'error' ? 'Le serveur d\'authentification ne répond pas' : ''
-  };
-  var file = page === 'login-erreur' ? 'login' : page;
-  if (!pages[page]) { page = 'login'; file = 'login'; }
-
+  var pages = { login: 'Connexion', 'login-erreur': 'Code refusé', alogin: 'Connecté', status: 'Statut', logout: 'Déconnexion', error: 'Erreur' };
+  var frame = document.getElementById('frame');
   var nav = document.getElementById('nav');
+  var buttons = {};
   Object.keys(pages).forEach(function (p) {
-    var a = document.createElement('a'); a.href = go(p); a.textContent = pages[p];
-    if (p === page) a.className = 'on'; nav.appendChild(a);
+    var b = document.createElement('button');
+    b.type = 'button'; b.textContent = pages[p];
+    b.onclick = function () { location.hash = p; };
+    buttons[p] = b; nav.appendChild(b);
   });
 
-  function test(cond) {
-    var m = cond.match(/^\s*([\w-]+)\s*(==|!=)?\s*(?:'([^']*)'|"([^"]*)")?\s*$/);
-    if (!m) return false;
-    var v = vars[m[1]] || '';
-    if (!m[2]) return v !== '';
-    var cmp = m[3] !== undefined ? m[3] : (m[4] || '');
-    return m[2] === '==' ? v === cmp : v !== cmp;
+  function varsFor(page) {
+    var L = function (p) { return 'apercu:' + p; };
+    return {
+      'link-login-only': L('alogin'), 'link-login': L('login'), 'link-logout': L('logout'),
+      'link-status': L('status'), 'link-orig': L('status'), 'link-redirect': L('status'),
+      'link-orig-esc': L('status'), 'link-redirect-esc': L('status'), 'mac-esc': 'AA-BB-CC',
+      'username': page === 'login' ? '' : '7K2P9Q',
+      'ip': '10.5.50.23', 'mac': 'AA:BB:CC:12:34:56', 'uptime': '1h12m', 'session-time-left': '22h48m',
+      'bytes-in-nice': '18.4 MiB', 'bytes-out-nice': '312.7 MiB', 'login-by': 'http-chap', 'login-by-mac': 'no',
+      'trial': 'yes', 'chap-id': '', 'chap-challenge': '',
+      'error': page === 'login-erreur' ? 'Code ou identifiant incorrect, veuillez réessayer' :
+               page === 'error' ? "Le serveur d'authentification ne répond pas" : ''
+    };
   }
-  function render(src) {
+  function render(src, vars) {
+    function test(cond) {
+      var m = cond.match(/^\s*([\w-]+)\s*(==|!=)?\s*(?:'([^']*)'|"([^"]*)")?\s*$/);
+      if (!m) return false;
+      var v = vars[m[1]] || '';
+      if (!m[2]) return v !== '';
+      var cmp = m[3] !== undefined ? m[3] : (m[4] || '');
+      return m[2] === '==' ? v === cmp : v !== cmp;
+    }
     var out = '', stack = [], re = /\$\(([^)]*)\)/g, last = 0, m;
     var active = function () { return stack.every(function (f) { return f.on; }); };
     while ((m = re.exec(src))) {
       if (active()) out += src.slice(last, m.index);
       last = re.lastIndex;
-      var t = m[1];
+      var t = m[1], top;
       if (/^if\s/.test(t)) { var ok = test(t.slice(3)); stack.push({ on: ok, done: ok }); }
-      else if (/^elif\s/.test(t)) { var top = stack[stack.length - 1]; top.on = !top.done && test(t.slice(5)); top.done = top.done || top.on; }
-      else if (t === 'else') { var tp = stack[stack.length - 1]; tp.on = !tp.done; tp.done = true; }
+      else if (/^elif\s/.test(t)) { top = stack[stack.length - 1]; top.on = !top.done && test(t.slice(5)); top.done = top.done || top.on; }
+      else if (t === 'else') { top = stack[stack.length - 1]; top.on = !top.done; top.done = true; }
       else if (t === 'endif') stack.pop();
       else if (active()) out += (vars[t] !== undefined ? vars[t] : '');
     }
     return out + src.slice(last);
   }
 
-  var frame = document.getElementById('frame');
-  fetch('hotspot/' + file + '.html').then(function (r) { return r.text(); }).then(function (src) {
-    var html = render(src).replace('<head>', '<head><base href="' + new URL('hotspot/', here).href + '" target="_top">');
-    frame.onload = function () {
-      var w = frame.contentWindow;
-      // Les formulaires du hotspot font un POST : en démo, on suit simplement le lien.
-      w.HTMLFormElement.prototype.submit = function () { top.location.href = this.getAttribute('action'); };
-      w.document.addEventListener('submit', function (e) {
-        if (!e.defaultPrevented) { e.preventDefault(); top.location.href = e.target.getAttribute('action'); }
-      });
-    };
-    frame.srcdoc = html;
-  });
+  // Les liens et formulaires du hotspot pointent vers « apercu:page » : on change d'écran au lieu de quitter la page.
+  window.__nav = function (url) {
+    var p = String(url || '').replace(/^apercu:/, '').split('?')[0];
+    location.hash = pages[p] ? p : 'login';
+  };
+
+  var cache = {}, timer = null;
+  function show() {
+    var page = location.hash.slice(1);
+    if (!pages[page]) page = 'login';
+    for (var k in buttons) buttons[k].setAttribute('aria-current', k === page ? 'page' : 'false');
+    var file = page === 'login-erreur' ? 'login' : page;
+    var get = cache[file] ? Promise.resolve(cache[file]) :
+      fetch('hotspot/' + file + '.html').then(function (r) { return r.text(); }).then(function (t) { return (cache[file] = t); });
+    get.then(function (src) {
+      return Promise.all([src, cache.css || fetch('hotspot/style.css').then(function (r) { return r.text(); }).then(function (c) { return (cache.css = c); })]);
+    }).then(function (res) {
+      var html = render(res[0], varsFor(page))
+        .replace('<link rel="stylesheet" href="style.css">', '<style>' + res[1] + '</style>')
+        .replace(/<script src="md5\.js"><\/script>/, '')
+        .replace(/location\.href\s*=\s*([^;]+);/g, 'parent.__nav($1);');
+      frame.onload = function () {
+        var w = frame.contentWindow, d = w.document;
+        w.HTMLFormElement.prototype.submit = function () { parent.__nav(this.getAttribute('action')); };
+        d.addEventListener('submit', function (e) {
+          var handled = e.defaultPrevented;
+          e.preventDefault();
+          if (!handled) parent.__nav(e.target.getAttribute('action'));
+        });
+        d.addEventListener('click', function (e) {
+          var a = e.target.closest && e.target.closest('a[href^="apercu:"]');
+          if (a) { e.preventDefault(); parent.__nav(a.getAttribute('href')); }
+        }, true);
+      };
+      frame.srcdoc = html;
+    });
+  }
+  window.addEventListener('hashchange', show);
+  show();
 })();
 </script>
-</body>
-</html>
