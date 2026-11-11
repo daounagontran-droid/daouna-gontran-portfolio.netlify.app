@@ -1,7 +1,7 @@
 # Portail captif DAOUNA Wi-Fi (MikroTik)
 
 Portail de connexion hotspot pour routeur MikroTik, aux couleurs DAOUNA Gontran (bleu nuit et or).
-Design épuré : fond bleu nuit, logo Wi-Fi doré animé, un seul champ pour le code du ticket et un bouton. Rien d'autre sur la page d'accueil que les trois tarifs et le numéro pour acheter un ticket.
+Design épuré bleu sur blanc, avec un logo personnalisé (un « D » blanc sur un carré bleu, avec des ondes Wi-Fi à l'intérieur), un seul champ pour le code du ticket et un bouton. Rien d'autre sur la page d'accueil que les trois tarifs et le numéro pour acheter un ticket.
 
 - **Aperçu en ligne** : `apercu.html` (simule le routeur, aucune connexion réelle).
 - **Fichiers à envoyer au routeur** : dossier `hotspot/` (ou l'archive `portail-captif-daouna.zip`).
@@ -31,9 +31,10 @@ Aucune police ni image externe : la page s'affiche instantanément, même sans I
 
 ## Personnaliser
 
-- **Nom du réseau** : remplacez `DAOUNA-WIFI` dans les fichiers `.html`.
+- **Nom du réseau** : remplacez `DAOUNA` dans les fichiers `.html`.
+- **Logo** : le bloc `<div class="logo">` de `login.html` et `status.html` (dessin SVG, aucune image à envoyer).
 - **Tarifs** : bloc `plans` de `login.html`.
 - **Téléphone** : bas de `login.html` et de `error.html`.
-- **Couleurs** : variables `--bg`, `--gold`, `--text` en haut de `style.css`.
+- **Couleurs** : variables `--bg`, `--accent`, `--text` en haut de `style.css`.
 
 Après une modification, réenvoyez le fichier sur le routeur puis rechargez la page (le téléphone garde parfois l'ancienne version en cache).

@@ -2,15 +2,15 @@
 <title>Portail DAOUNA Wi-Fi</title>
 <style>
   /* Bandeau de navigation doré au-dessus d'un écran plein qui affiche la vraie page du hotspot. */
-  :root { --navy: #0b1f3a; --gold: #e0a526; --ink: #0b1f3a; --paper: #ffffff; color-scheme: dark; }
+  :root { --bg: #ffffff; --bar: #f5f7fb; --line: #e3e8f2; --ink: #0b1f3a; --blue: #1d4ed8; --paper: #ffffff; color-scheme: light; }
   html, body { height: 100%; }
-  body { margin: 0; background: var(--navy); color: var(--paper); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; display: flex; flex-direction: column; }
-  nav { flex: none; display: flex; align-items: center; gap: 4px; padding-block: 8px; padding-left: max(12px, env(safe-area-inset-left, 0px)); padding-right: max(12px, env(safe-area-inset-right, 0px)); background: var(--gold); overflow-x: auto; white-space: nowrap; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; display: flex; flex-direction: column; }
+  nav { flex: none; display: flex; align-items: center; gap: 4px; padding-block: 8px; padding-left: max(12px, env(safe-area-inset-left, 0px)); padding-right: max(12px, env(safe-area-inset-right, 0px)); background: var(--bar); border-bottom: 1px solid var(--line); overflow-x: auto; white-space: nowrap; }
   nav strong { font-size: 12px; text-transform: uppercase; letter-spacing: .1em; color: var(--ink); margin-right: 8px; }
   nav button { font: inherit; font-size: 13px; font-weight: 700; color: var(--ink); background: transparent; border: 0; padding: 6px 12px; border-radius: 999px; cursor: pointer; }
-  nav button[aria-current="page"] { background: var(--ink); color: var(--paper); }
+  nav button[aria-current="page"] { background: var(--blue); color: var(--paper); }
   nav button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
-  iframe { flex: 1; width: 100%; border: 0; display: block; background: var(--navy); }
+  iframe { flex: 1; width: 100%; border: 0; display: block; background: var(--bg); }
 </style>
 <nav id="nav" aria-label="Écrans du portail"><strong>Aperçu</strong></nav>
 <iframe id="frame" title="Portail captif DAOUNA Wi-Fi"></iframe>
