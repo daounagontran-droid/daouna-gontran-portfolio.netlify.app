@@ -1,0 +1,41 @@
+/* Mikhmon V4 - impression des vouchers */
+* { box-sizing: border-box; }
+body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: #111; background: #eef0f4; }
+.bar { position: sticky; top: 0; display: flex; flex-wrap: wrap; gap: 14px; align-items: center; padding: 10px 16px; background: #1c2333; color: #fff; z-index: 2; }
+.bar a { color: #9cc2ff; text-decoration: none; }
+.bar button { margin-left: auto; background: #3b82f6; color: #fff; border: 0; border-radius: 6px; padding: 7px 16px; font-size: 14px; cursor: pointer; }
+.sheet { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 8px; padding: 12px; max-width: 1000px; margin: 0 auto; }
+.voucher { background: #fff; border: 1.5px dashed #999; border-radius: 8px; overflow: hidden; break-inside: avoid; page-break-inside: avoid; }
+.v-head { display: flex; justify-content: space-between; align-items: center; background: var(--c); color: #fff; padding: 5px 10px; font-weight: 700; font-size: 13px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.v-num { font-weight: 400; font-size: 11px; opacity: .85; }
+.v-body { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 10px 4px; }
+.v-label { font-size: 9.5px; text-transform: uppercase; letter-spacing: .05em; color: #666; }
+.v-code { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 22px; font-weight: 700; letter-spacing: 1.5px; }
+.v-code.sm { font-size: 15px; letter-spacing: .5px; }
+.v-qr img, .v-qr canvas { width: 72px !important; height: 72px !important; }
+.v-foot { display: flex; justify-content: space-between; align-items: baseline; padding: 2px 10px 6px; font-size: 12px; }
+.v-foot strong { font-size: 15px; color: var(--c); }
+.v-dns { font-size: 9.5px; color: #555; padding: 0 10px 6px; }
+
+/* petit format : 4-5 par ligne */
+.tpl-small .sheet { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 5px; }
+.tpl-small .v-code { font-size: 17px; }
+.tpl-small .v-head { font-size: 11px; padding: 3px 8px; }
+
+/* ticket thermique 58 mm */
+body.tpl-thermal { background: #fff; }
+.tpl-thermal .sheet { display: block; max-width: 58mm; padding: 0; }
+.tpl-thermal .voucher { border: 0; border-bottom: 1px dashed #000; border-radius: 0; padding: 4mm 0; text-align: center; }
+.tpl-thermal .v-head { background: none; color: #000; justify-content: center; font-size: 14px; }
+.tpl-thermal .v-num { display: none; }
+.tpl-thermal .v-body { flex-direction: column; }
+.tpl-thermal .v-foot { justify-content: center; gap: 10px; }
+.tpl-thermal .v-foot strong { color: #000; }
+
+@media print {
+  .noprint { display: none !important; }
+  body { background: #fff; }
+  .sheet { padding: 0; max-width: none; }
+  @page { margin: 8mm; }
+
+}
