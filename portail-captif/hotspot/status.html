@@ -6,9 +6,9 @@ $(if refresh-timeout)<meta http-equiv="refresh" content="$(refresh-timeout-secs)
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="pragma" content="no-cache">
 <meta http-equiv="expires" content="-1">
-<meta name="theme-color" content="#0b1f3a">
-<title>DAOUNA Wi-Fi · Statut</title>
+<meta name="theme-color" content="#0a1830">
 <link rel="stylesheet" href="style.css">
+<title>DAOUNA Wi-Fi · Statut</title>
 <script>
   function openLogout() {
     if (window.name != 'hotspot_status') return true;
@@ -19,35 +19,20 @@ $(if refresh-timeout)<meta http-equiv="refresh" content="$(refresh-timeout-secs)
 </script>
 </head>
 <body>
-<main class="center">
-  <div class="box">
-    <div class="brand">
-      <div class="brand-mark"><svg class="i" viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><path d="M12 20h.01"/></svg></div>
-      <div><div class="brand-name">DAOUNA <b>Wi-Fi</b></div><div class="brand-sub">DAOUNA-WIFI</div></div>
-    </div>
-    <div class="ticket">
-      <div class="ticket-head">
-        <span class="ssid" style="color:var(--ok);background:#dff5ec;border-color:#bfe8d6"><span class="live"></span>En ligne</span>
-        <h2 style="margin-top:12px">$(if login-by != 'mac')$(username)$(else)Bienvenue$(endif)</h2>
-        <p>Votre session Internet est active.</p>
-      </div>
-      <div class="perfo"></div>
-      <div class="ticket-body">
-        <form action="$(link-logout)" name="logout" onsubmit="return openLogout()">
-          <table class="rows">
-            $(if session-time-left)<tr><td>Temps restant</td><td>$(session-time-left)</td></tr>$(endif)
-            <tr><td>Connecté depuis</td><td>$(uptime)</td></tr>
-            <tr><td>Données reçues</td><td>$(bytes-out-nice)</td></tr>
-            <tr><td>Données envoyées</td><td>$(bytes-in-nice)</td></tr>
-            <tr><td>Adresse IP</td><td>$(ip)</td></tr>
-            <tr><td>Adresse MAC</td><td>$(mac)</td></tr>
-          </table>
-          $(if login-by-mac != 'yes')<button class="btn btn-primary" type="submit">Se déconnecter</button>$(endif)
-        </form>
-        <p class="muted-center">Gardez cette page ouverte pour suivre votre temps.</p>
-      </div>
-    </div>
+<main class="wrap">
+  <div class="logo"><svg viewBox="0 0 48 48" aria-hidden="true"><path class="arc" d="M6 19a26 26 0 0 1 36 0"/><path class="arc" d="M12 25.5a17 17 0 0 1 24 0"/><path class="arc" d="M18 32a8.5 8.5 0 0 1 12 0"/><circle cx="24" cy="38" r="2.2" fill="currentColor" stroke="none"/></svg></div>
+  <h1>$(if login-by != 'mac')$(username)$(else)DAOUNA <span>Wi-Fi</span>$(endif)</h1>
+  <p class="lead">Vous êtes en ligne</p>
+  $(if session-time-left)<p class="big">$(session-time-left)</p><p class="big-label">temps restant</p>$(endif)
+  <div class="rows">
+    <div><span>Connecté depuis</span><b>$(uptime)</b></div>
+    <div><span>Données utilisées</span><b>$(bytes-out-nice)</b></div>
   </div>
+  $(if login-by-mac != 'yes')
+  <form action="$(link-logout)" name="logout" onsubmit="return openLogout()" style="margin:0">
+    <button class="btn btn-line" type="submit">Se déconnecter</button>
+  </form>
+  $(endif)
 </main>
 </body>
 </html>
